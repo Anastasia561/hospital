@@ -24,7 +24,7 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne
-    @JoinColumn(name="record_id")
+    @JoinColumn(name = "record_id")
     private Record record;
     @ManyToOne
     @JoinColumn(name = "patient_id")
@@ -88,5 +88,18 @@ public class Appointment {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", date=" + date +
+                ", time=" + time +
+                ", status=" + status +
+                ", record=" + record +
+                ", patient=" + patient +
+                ", doctor=" + doctor +
+                '}';
     }
 }

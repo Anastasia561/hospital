@@ -7,7 +7,7 @@
 </head>
 <body>
 <div layout:fragment="navbar"
-     th:replace="fragments/nav :: nav-admin"></div>
+     th:replace="~{fragments/nav :: nav-admin}"></div>
 
 <div layout:fragment="content">
     <h1>Doctors</h1>
@@ -15,7 +15,7 @@
         <div class="col">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${d.firstName + ' ' + d.lastName}"></h5>
+                    <h5 class="card-title" th:text="${d.fullName}"></h5>
                     <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${d.email}"></span></p>
                     <p class="card-text mb-1"><strong>Years of experience:</strong> <span
                             th:text="${d.experience}"></span></p>

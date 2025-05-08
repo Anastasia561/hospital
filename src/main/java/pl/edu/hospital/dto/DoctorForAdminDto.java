@@ -5,27 +5,27 @@ import pl.edu.hospital.entity.enums.Specialization;
 import java.time.LocalDate;
 
 public class DoctorForAdminDto {
-    private String firstName;
-    private String lastName;
+    private String username;
+    private String fullName;
     private String email;
     private Integer experience;
     private LocalDate employmentDate;
     private Specialization specialization;
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {

@@ -6,13 +6,14 @@ import org.springframework.stereotype.Repository;
 import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.enums.Status;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
     List<Appointment> findByPatientUsername(String username);
 
-    @Query("select count(a) from Appointment a where a.doctor.username=:username and a.status=:status")
-    Integer countByDoctorUsername(String username, Status status);
+    @Query("select count(a) from Appointment a where a.doctor.username=:username and a.status=:status and (a.date between :start and :end)")
+    Integer countByDoctorUsername(String username, Status status, LocalDate start, LocalDate end);
 
 }

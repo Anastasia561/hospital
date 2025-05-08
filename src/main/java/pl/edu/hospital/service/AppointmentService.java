@@ -5,6 +5,7 @@ import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.repository.AppointmentRepository;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,12 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    public Map<Status, Integer> getAppointmentStatisticsByDoctorUsername(String username) {
+    public Map<Status, Integer> getStatisticsForDoctorAndPeriod(String username, LocalDate startDate, LocalDate endDate) {
         HashMap<Status, Integer> statistics = new HashMap<>();
 
-        Integer scheduledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED);
-        Integer canceledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED);
-        Integer completedApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED);
+        Integer scheduledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
+        Integer canceledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
+        Integer completedApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
 
         statistics.put(Status.SCHEDULED, scheduledApp);
         statistics.put(Status.CANCELLED, canceledApp);

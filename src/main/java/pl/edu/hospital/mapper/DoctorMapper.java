@@ -8,8 +8,8 @@ import pl.edu.hospital.entity.Doctor;
 public class DoctorMapper {
     public static DoctorForAdminDto toDoctorForAdminDto(Doctor doctor) {
         DoctorForAdminDto dto = new DoctorForAdminDto();
-        dto.setFirstName(doctor.getFirstName());
-        dto.setLastName(doctor.getLastName());
+        dto.setUsername(doctor.getUsername());
+        dto.setFullName(doctor.getFirstName() + " " + doctor.getLastName());
         dto.setEmail(doctor.getEmail());
         dto.setExperience(doctor.getExperience());
         dto.setEmploymentDate(doctor.getEmploymentDate());

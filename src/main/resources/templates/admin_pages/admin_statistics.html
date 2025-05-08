@@ -7,24 +7,50 @@
 </head>
 <body>
 <div layout:fragment="navbar"
-     th:replace="fragments/nav :: nav-admin"></div>
+     th:replace="~{fragments/nav :: nav-admin}"></div>
 
 <div layout:fragment="content">
     <h1>Statistics</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>Key</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entry : ${statistics}">
-            <td th:text="${entry.key}">Key</td>
-            <td th:text="${entry.value}">Value</td>
-        </tr>
-        </tbody>
-    </table>
+
+    <form th:action="@{/admin/statistics}" method="post" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="doctor" class="form-label">Doctor</label>
+            <select id="doctor" name="data" class="form-select" required>
+                <option value="">-- Select Doctor --</option>
+                <option th:each="d : ${doctors}"
+                        th:value="${d.username+' '+d.fullName}"
+                        th:text="${d.fullName}">
+                </option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" required>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">View</button>
+        </div>
+    </form>
+
+    <div class="py-5 align-items-center">
+        <div th:if="${errorMessage}" class="alert alert-danger text-center">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+
+    <div th:if="${statistics != null}">
+        <h2>Statistics for <span th:text="${doctorFullName}"></span></h2>
+        <p>From <span th:text="${startDate}"></span> to <span th:text="${endDate}"></span></p>
+        <ul class="list-group">
+            <li class="list-group-item" th:each="entry : ${statistics}">
+                <span th:text="${entry.key}"></span>: <strong th:text="${entry.value}"></strong>
+            </li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

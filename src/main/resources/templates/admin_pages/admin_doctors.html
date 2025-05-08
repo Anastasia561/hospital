@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Admin</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="fragments/nav :: nav-admin"></div>
+
+<div layout:fragment="content">
+    <h1>Doctors</h1>
+    <div class="row row-cols-1 g-4 mt-4" th:each="d : ${doctors}">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${d.firstName + ' ' + d.lastName}"></h5>
+                    <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${d.email}"></span></p>
+                    <p class="card-text mb-1"><strong>Years of experience:</strong> <span
+                            th:text="${d.experience}"></span></p>
+                    <p class="card-text mb-1"><strong>Specialization:</strong> <span
+                            th:text="${d.specialization}"></span></p>
+                    <p class="card-text mb-0"><strong>Employment date:</strong><span
+                            th:text="${' '+d.employmentDate}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

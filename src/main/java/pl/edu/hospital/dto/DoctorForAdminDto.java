@@ -1,28 +1,40 @@
-package pl.edu.hospital.entity;
+package pl.edu.hospital.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
 import pl.edu.hospital.entity.enums.Specialization;
-import pl.edu.hospital.entity.enums.WorkingDay;
-import pl.edu.hospital.entity.enums.converter.WorkingDaysListConverter;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
-@Entity
-public class Doctor extends Person {
+public class DoctorForAdminDto {
+    private String firstName;
+    private String lastName;
+    private String email;
     private Integer experience;
-    @Column(name = "employment_date")
     private LocalDate employmentDate;
-    @Enumerated(EnumType.STRING)
     private Specialization specialization;
-    @OneToMany(mappedBy = "doctor")
-    private List<Consultation> consultations;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Integer getExperience() {
         return experience;

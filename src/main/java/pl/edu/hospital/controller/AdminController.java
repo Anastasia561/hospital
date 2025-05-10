@@ -4,26 +4,25 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
-import pl.edu.hospital.dto.AppointmentForDoctorDto;
+import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.dto.PatientForAdminDto;
-import pl.edu.hospital.dto.PatientForScheduleDto;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
-import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
+import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
 import pl.edu.hospital.service.PatientService;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -37,18 +36,20 @@ public class AdminController {
     private final PatientService patientService;
     private final DoctorService doctorService;
     private final AdminService adminService;
+    private final ConsultationService consultationService;
 
     public AdminController(AppointmentService appointmentService, PatientService patientService,
-                           DoctorService doctorService, AdminService adminService) {
+                           DoctorService doctorService, AdminService adminService, ConsultationService consultationService) {
         this.appointmentService = appointmentService;
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.adminService = adminService;
+        this.consultationService = consultationService;
     }
 
     @GetMapping("/info")
     public String getStatistics(Model model) {
-        model.addAttribute("doctors", doctorService.getAllForAdmin()); // list of doctors
+        model.addAttribute("doctors", doctorService.getAllForAdmin());
         return "admin_pages/admin_statistics";
     }
 
@@ -98,17 +99,22 @@ public class AdminController {
     @GetMapping("/doctors/{username}/schedule")
     public String getDoctorSchedule(@PathVariable String username, Model model) {
         String dFullName = doctorService.getDoctorFullNameByUsername(username);
-        Map<String, List<AppointmentForDoctorDto>> scheduleByDay = appointmentService
-                .getAllForDoctorByUsername(username).stream()
-                .map(d -> {
-                    PatientForScheduleDto patientDto = patientService.getPatientById(d.getPatientId());
-                    return AppointmentMapper.toAppointmentForDoctorDto(d, patientDto);
-                })
-                .collect(Collectors.groupingBy(a -> a.getDate().getDayOfWeek().name(), TreeMap::new, Collectors.toList()));
+        Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
+                .getAllByDoctorUsername(username).stream()
+                .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
 
         model.addAttribute("days", WorkingDay.values());
         model.addAttribute("dFullName", dFullName);
         model.addAttribute("scheduleByDay", scheduleByDay);
         return "admin_pages/admin_doctor_schedule";
+    }
+
+    @PostMapping("/consultations/edit")
+    public RedirectView saveEditedConsultation(@ModelAttribute ConsultationDto consultation) {
+        consultationService.updateConsultation(consultation);
+        System.out.println(consultation.getId());
+        RedirectView r = new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule");
+        r.setContextRelative(true);
+        return r;
     }
 }

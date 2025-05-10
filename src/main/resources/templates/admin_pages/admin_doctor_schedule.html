@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout}">
 <head>
     <title layout:fragment="title">Doctor</title>
@@ -13,16 +13,56 @@
     <h3 th:text="'Weekly Schedule for Doctor ' + ${dFullName}"></h3>
 
     <div class="calendar mt-4">
-        <div th:each="day : ${days}" class="day-column">
-            <h5 th:text="${day.name()}"></h5>
+        <div th:each="entry : ${scheduleByDay}">
+            <div class="day-column">
+                <h5 th:text="${entry.key.name()}"></h5>
 
-            <div th:each="a : ${scheduleByDay[day]}">
-                <div class="appointment">
-                    <strong th:text="${a.date}"></strong>
-                    <strong th:text="${a.time}"></strong><br/>
-                    <span th:text="${a.patientFullName}"></span><br/>
-                    <span th:text="${a.patientEmail}"></span><br/>
-                    <small th:text="${a.status}"></small>
+                <div th:each="c : ${entry.value}">
+                    <div class="appointment">
+                        <strong th:text="${c.startTime}"></strong><br/>
+                        <strong th:text="${c.endTime}"></strong><br/>
+
+                        <button class="btn btn-sm btn-warning mt-2" data-bs-toggle="modal"
+                                th:attr="data-bs-target=${'#editModal-' + c.id}">
+                            Edit
+                        </button>
+
+                        <div class="modal fade" th:id="'editModal-' + ${c.id}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form th:action="@{/admin/consultations/edit}" method="post">
+                                        <input type="hidden" name="id" th:value="${c.id}"/>
+                                        <input type="hidden" name="doctorUsername" th:value="${c.doctorUsername}"/>
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edit Consultation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <strong><p th:text="|Day: ${c.day}|"></p></strong>
+
+                                            <label>Start Time:</label>
+                                            <input class="form-control" type="time" name="startTime"
+                                                   th:value="${c.startTime}"/>
+
+                                            <label>End Time:</label>
+                                            <input class="form-control" type="time" name="endTime"
+                                                   th:value="${c.endTime}"/>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -28,4 +28,44 @@ public class Consultation {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public WorkingDay getWorkingDay() {
+        return workingDay;
+    }
+
+    public void setWorkingDay(WorkingDay workingDay) {
+        this.workingDay = workingDay;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 }

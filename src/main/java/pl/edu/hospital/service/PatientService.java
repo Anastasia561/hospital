@@ -2,6 +2,7 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.dto.PatientForScheduleDto;
 import pl.edu.hospital.mapper.PatientMapper;
 import pl.edu.hospital.repository.PatientRepository;
 
@@ -20,5 +21,9 @@ public class PatientService {
                 .stream()
                 .map(PatientMapper::toPatientForAdminDto)
                 .toList();
+    }
+
+    public PatientForScheduleDto getPatientById(int id) {
+        return PatientMapper.toPatientForScheduleDto(patientRepository.findById(id).get());
     }
 }

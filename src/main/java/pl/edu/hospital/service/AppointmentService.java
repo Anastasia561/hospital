@@ -1,8 +1,10 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import pl.edu.hospital.dto.AppointmentDto;
 import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.enums.Status;
+import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.repository.AppointmentRepository;
 
 import java.time.LocalDate;
@@ -33,5 +35,12 @@ public class AppointmentService {
         statistics.put(Status.CANCELLED, canceledApp);
         statistics.put(Status.COMPLETED, completedApp);
         return statistics;
+    }
+
+    public List<AppointmentDto> getAllForDoctorByUsername(String username) {
+        return appointmentRepository.findByDoctorUsername(username)
+                .stream()
+                .map(AppointmentMapper::toAppointmentDto)
+                .toList();
     }
 }

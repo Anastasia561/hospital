@@ -4,22 +4,31 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import pl.edu.hospital.dto.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.dto.PatientForScheduleDto;
+import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
+import pl.edu.hospital.entity.enums.WorkingDay;
+import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.DoctorService;
 import pl.edu.hospital.service.PatientService;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -75,9 +84,31 @@ public class AdminController {
     }
 
     @GetMapping("/doctors")
-    public String getDoctors(Model model) {
-        List<DoctorForAdminDto> doctors = doctorService.getAllForAdmin();
+    public String getDoctors(@RequestParam(required = false) String specialization, Model model) {
+        List<DoctorForAdminDto> doctors = (specialization == null || specialization.isBlank())
+                ? doctorService.getAllForAdmin()
+                : doctorService.getAllBySpecialization(Specialization.valueOf(specialization));
+
+        model.addAttribute("specializations", Specialization.values());
+        model.addAttribute("selectedSpecialization", specialization);
         model.addAttribute("doctors", doctors);
         return "admin_pages/admin_doctors";
+    }
+
+    @GetMapping("/doctors/{username}/schedule")
+    public String getDoctorSchedule(@PathVariable String username, Model model) {
+        String dFullName = doctorService.getDoctorFullNameByUsername(username);
+        Map<String, List<AppointmentForDoctorDto>> scheduleByDay = appointmentService
+                .getAllForDoctorByUsername(username).stream()
+                .map(d -> {
+                    PatientForScheduleDto patientDto = patientService.getPatientById(d.getPatientId());
+                    return AppointmentMapper.toAppointmentForDoctorDto(d, patientDto);
+                })
+                .collect(Collectors.groupingBy(a -> a.getDate().getDayOfWeek().name(), TreeMap::new, Collectors.toList()));
+
+        model.addAttribute("days", WorkingDay.values());
+        model.addAttribute("dFullName", dFullName);
+        model.addAttribute("scheduleByDay", scheduleByDay);
+        return "admin_pages/admin_doctor_schedule";
     }
 }

@@ -24,6 +24,7 @@ import pl.edu.hospital.service.DoctorService;
 import pl.edu.hospital.service.PatientService;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,6 +46,11 @@ public class AdminController {
         this.doctorService = doctorService;
         this.adminService = adminService;
         this.consultationService = consultationService;
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "admin_pages/admin_home";
     }
 
     @GetMapping("/info")
@@ -104,6 +110,9 @@ public class AdminController {
                 .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
 
         model.addAttribute("days", WorkingDay.values());
+        List<WorkingDay> freeDays = Arrays.stream(WorkingDay.values()).filter(d -> !scheduleByDay.containsKey(d)).toList();
+        model.addAttribute("freeDays", freeDays);
+        model.addAttribute("username", username);
         model.addAttribute("dFullName", dFullName);
         model.addAttribute("scheduleByDay", scheduleByDay);
         return "admin_pages/admin_doctor_schedule";
@@ -112,9 +121,25 @@ public class AdminController {
     @PostMapping("/consultations/edit")
     public RedirectView saveEditedConsultation(@ModelAttribute ConsultationDto consultation) {
         consultationService.updateConsultation(consultation);
-        System.out.println(consultation.getId());
         RedirectView r = new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule");
         r.setContextRelative(true);
         return r;
     }
+
+    @PostMapping("/consultations/create")
+    public RedirectView createConsultation(@ModelAttribute ConsultationDto consultation) {
+        consultationService.createConsultation(consultation);
+        RedirectView r = new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule");
+        r.setContextRelative(true);
+        return r;
+    }
+
+    @PostMapping("/consultations/delete")
+    public RedirectView deleteConsultation(@RequestParam int id, @RequestParam String doctorUsername) {
+        consultationService.deleteConsultation(id);
+        RedirectView r = new RedirectView("/admin/doctors/" + doctorUsername + "/schedule");
+        r.setContextRelative(true);
+        return r;
+    }
+
 }

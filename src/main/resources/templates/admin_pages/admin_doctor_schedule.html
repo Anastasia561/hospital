@@ -22,10 +22,17 @@
                         <strong th:text="${c.startTime}"></strong><br/>
                         <strong th:text="${c.endTime}"></strong><br/>
 
-                        <button class="btn btn-sm btn-warning mt-2" data-bs-toggle="modal"
-                                th:attr="data-bs-target=${'#editModal-' + c.id}">
-                            Edit
-                        </button>
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal"
+                                    th:attr="data-bs-target=${'#editModal-' + c.id}">
+                                Edit
+                            </button>
+                            <form th:action="@{/admin/consultations/delete}" method="post" th:object="${c}">
+                                <input type="hidden" name="id" th:value="${c.id}"/>
+                                <input type="hidden" name="doctorUsername" th:value="${c.doctorUsername}"/>
+                                <button type="submit" class="btn btn-sm btn-danger mt-2">Delete</button>
+                            </form>
+                        </div>
 
                         <div class="modal fade" th:id="'editModal-' + ${c.id}" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog">
@@ -64,6 +71,47 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mb-4 mt-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addConsultationModal">
+            Add Consultation Hours
+        </button>
+    </div>
+
+    <div class="modal fade" id="addConsultationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/admin/consultations/create}" method="post">
+                    <input type="hidden" name="doctorUsername"
+                           th:value="${username}"/>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Consultation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label>Day:</label>
+                        <select class="form-select" name="day">
+                            <option th:each="d : ${freeDays}" th:value="${d}" th:text="${d}"></option>
+                        </select>
+
+                        <label>Start Time:</label>
+                        <input class="form-control" type="time" name="startTime"/>
+
+                        <label>End Time:</label>
+                        <input class="form-control" type="time" name="endTime"/>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

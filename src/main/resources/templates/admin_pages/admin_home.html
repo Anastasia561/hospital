@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Admin</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-admin}"></div>
+
+<div layout:fragment="content">
+    <div th:fragment="content" class="text-center mt-5">
+        <h1>Welcome to MediCore</h1>
+        <h3>Your platform for managing doctors and patients efficiently</h3>
+
+        <img th:src="@{/images/medicore_home.png}" alt="MediCore Banner" class="img-fluid mt-4"
+             style="max-width: 600px;">
+    </div>
+</div>
+</body>
+</html>

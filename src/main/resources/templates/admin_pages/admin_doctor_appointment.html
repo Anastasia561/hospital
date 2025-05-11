@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Doctor</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-admin}"></div>
+
+<div layout:fragment="content">
+    <h3 th:text="'Appointments for Doctor ' + ${dFullName}"></h3>
+    <form th:action="@{/admin/doctors/{username}/apps(username=${username})}" method="post" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" name="status" class="form-control">
+                <option value="">All</option>
+                <option value="SCHEDULED">Scheduled</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">View</button>
+        </div>
+    </form>
+
+    <div class="calendar mt-4">
+        <div class="calendar-grid">
+            <div class="day-column" th:each="entry : ${appointments}">
+                <h4 th:text="${' '+entry.key}">Date</h4>
+                <div class="appointment-grid">
+                    <div class="appointment-block" th:each="a : ${entry.value}">
+                        <div class="time-range">
+                            <strong th:text="${a.startTime}"></strong>-
+                            <strong th:text="${a.endTime}"></strong>
+                        </div>
+                        <span th:text="${a.patientFullName}"></span>
+                        <span class="email" th:text="${a.patientPhone}"></span>
+                        <i><strong><span th:text="${a.status}"></span></strong></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5 align-items-center">
+        <div th:if="${errorMessage}" class="alert alert-danger text-center">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

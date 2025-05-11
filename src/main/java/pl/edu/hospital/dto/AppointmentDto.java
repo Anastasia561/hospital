@@ -7,9 +7,11 @@ import java.time.LocalTime;
 
 public class AppointmentDto {
     private LocalDate date;
-    private LocalTime time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Status status;
-    private Integer patientId;
+    private String patientFullName;
+    private String patientPhone;
 
     public LocalDate getDate() {
         return date;
@@ -19,12 +21,20 @@ public class AppointmentDto {
         this.date = date;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public Status getStatus() {
@@ -35,11 +45,19 @@ public class AppointmentDto {
         this.status = status;
     }
 
-    public Integer getPatientId() {
-        return patientId;
+    public String getPatientFullName() {
+        return patientFullName;
     }
 
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
+    public void setPatientFullName(String patientFullName) {
+        this.patientFullName = patientFullName;
+    }
+
+    public String getPatientPhone() {
+        return patientPhone;
+    }
+
+    public void setPatientPhone(String patientPhone) {
+        this.patientPhone = patientPhone;
     }
 }

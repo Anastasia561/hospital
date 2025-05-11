@@ -1,28 +1,18 @@
 package pl.edu.hospital.mapper;
 
 import pl.edu.hospital.dto.AppointmentDto;
-import pl.edu.hospital.dto.AppointmentForDoctorDto;
-import pl.edu.hospital.dto.PatientForScheduleDto;
 import pl.edu.hospital.entity.Appointment;
+import pl.edu.hospital.entity.Patient;
 
 public class AppointmentMapper {
-    public static AppointmentDto toAppointmentDto(Appointment appointment) {
+    public static AppointmentDto toAppointmentDto(Appointment appointment, Patient patient) {
         AppointmentDto dto = new AppointmentDto();
         dto.setDate(appointment.getDate());
-        dto.setTime(appointment.getTime());
+        dto.setStartTime(appointment.getTime());
+        dto.setEndTime(appointment.getTime().plusHours(1)); //1 hour for appointment
         dto.setStatus(appointment.getStatus());
-        dto.setPatientId(appointment.getPatient().getId());
-        return dto;
-    }
-
-    public static AppointmentForDoctorDto toAppointmentForDoctorDto(AppointmentDto appDto,
-                                                                    PatientForScheduleDto patientDto) {
-        AppointmentForDoctorDto dto = new AppointmentForDoctorDto();
-        dto.setDate(appDto.getDate());
-        dto.setStatus(appDto.getStatus());
-        dto.setTime(appDto.getTime());
-        dto.setPatientEmail(patientDto.getEmail());
-        dto.setPatientEmail(patientDto.getFullName());
+        dto.setPatientPhone(patient.getPhoneNumber());
+        dto.setPatientFullName(patient.getFirstName() + " " + patient.getLastName());
         return dto;
     }
 }

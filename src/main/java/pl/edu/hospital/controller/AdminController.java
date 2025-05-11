@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import pl.edu.hospital.dto.AppointmentDto;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.dto.PatientForAdminDto;
@@ -25,6 +26,7 @@ import pl.edu.hospital.service.PatientService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -142,4 +144,36 @@ public class AdminController {
         return r;
     }
 
+    @PostMapping("/doctors/{username}/apps")
+    public RedirectView getAppointmentsInRange(@PathVariable String username,
+                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                               @RequestParam String status,
+                                               RedirectAttributes redirectAttributes) {
+
+        LinkedHashMap<LocalDate, List<AppointmentDto>> appointments = (status == null || status.isBlank())
+                ? appointmentService.getAllForDoctorByUsernameInRange(username, startDate, endDate)
+                : appointmentService.getAllForDoctorByUsernameInRangeWithStatus(username, startDate,
+                endDate, Status.valueOf(status));
+
+        redirectAttributes.addFlashAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
+        redirectAttributes.addFlashAttribute("username", username);
+        if (startDate.isAfter(endDate)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+        } else if (appointments.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+        } else {
+            redirectAttributes.addFlashAttribute("appointments", appointments);
+        }
+
+        RedirectView r = new RedirectView("/admin/doctors/" + username + "/appointments");
+        r.setContextRelative(true);
+        return r;
+    }
+
+    @GetMapping("/doctors/{username}/appointments")
+    public String getAppointments(@PathVariable String username, Model model) {
+        model.addAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
+        return "admin_pages/admin_doctor_appointment";
+    }
 }

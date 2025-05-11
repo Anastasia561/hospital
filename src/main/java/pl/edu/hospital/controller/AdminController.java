@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
-import pl.edu.hospital.dto.AppointmentDto;
+import pl.edu.hospital.dto.AppointmentForDoctorDto;
+import pl.edu.hospital.dto.AppointmentForPatientDto;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.dto.PatientForAdminDto;
@@ -145,16 +146,14 @@ public class AdminController {
     }
 
     @PostMapping("/doctors/{username}/apps")
-    public RedirectView getAppointmentsInRange(@PathVariable String username,
-                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                               @RequestParam String status,
-                                               RedirectAttributes redirectAttributes) {
+    public RedirectView getAppointmentsForDoctorInRange(@PathVariable String username,
+                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                        @RequestParam(required = false) Status status,
+                                                        RedirectAttributes redirectAttributes) {
 
-        LinkedHashMap<LocalDate, List<AppointmentDto>> appointments = (status == null || status.isBlank())
-                ? appointmentService.getAllForDoctorByUsernameInRange(username, startDate, endDate)
-                : appointmentService.getAllForDoctorByUsernameInRangeWithStatus(username, startDate,
-                endDate, Status.valueOf(status));
+        LinkedHashMap<LocalDate, List<AppointmentForDoctorDto>> appointments =
+                appointmentService.getAppointmentsForDoctorFiltered(username, startDate, endDate, status);
 
         redirectAttributes.addFlashAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
         redirectAttributes.addFlashAttribute("username", username);
@@ -172,8 +171,43 @@ public class AdminController {
     }
 
     @GetMapping("/doctors/{username}/appointments")
-    public String getAppointments(@PathVariable String username, Model model) {
+    public String getAppointmentsForDoctor(@PathVariable String username, Model model) {
         model.addAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
+        model.addAttribute("statuses", Status.values());
         return "admin_pages/admin_doctor_appointment";
+    }
+
+    @PostMapping("/patients/{username}/apps")
+    public RedirectView getAppointmentsForPatientInRange(@PathVariable String username,
+                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                         @RequestParam(required = false) Status status,
+                                                         @RequestParam(required = false) Specialization specialization,
+                                                         RedirectAttributes redirectAttributes) {
+
+        LinkedHashMap<LocalDate, List<AppointmentForPatientDto>> appointments =
+                appointmentService.getAppointmentsForPatientFiltered(username, startDate, endDate, status, specialization);
+
+        redirectAttributes.addFlashAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
+        redirectAttributes.addFlashAttribute("username", username);
+        if (startDate.isAfter(endDate)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+        } else if (appointments.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+        } else {
+            redirectAttributes.addFlashAttribute("appointments", appointments);
+        }
+
+        RedirectView r = new RedirectView("/admin/patients/" + username + "/appointments");
+        r.setContextRelative(true);
+        return r;
+    }
+
+    @GetMapping("/patients/{username}/appointments")
+    public String getAppointmentsForPatient(@PathVariable String username, Model model) {
+        model.addAttribute("specializations", Specialization.values());
+        model.addAttribute("statuses", Status.values());
+        model.addAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
+        return "admin_pages/admin_patient_appointment";
     }
 }

@@ -6,4 +6,5 @@ import pl.edu.hospital.entity.Patient;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Integer> {
+    Patient findByUsername(String username);
 }

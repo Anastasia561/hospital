@@ -22,7 +22,7 @@
                             <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${p.email}"></span></p>
                             <p class="card-text mb-1"><strong>Phone:</strong> <span th:text="${p.phone}"></span></p>
                             <p class="card-text mb-1"><strong>Birth Date:</strong> <span
-                                    th:text="${p.birthDate}"></span></p>
+                                    th:text="${''+p.birthDate}"></span></p>
                             <p class="card-text mb-0">
                                 <strong>Address:</strong>
                                 <span th:text="${p.address.street + ' ' + p.address.number + ', ' + p.address.city.name + ', ' + p.address.city.country.name}"></span>
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="col-md-4 d-flex flex-column align-items-end justify-content-center gap-2">
-                            <a href=""
+                            <a th:href="@{/admin/patients/{username}/appointments(username=${p.username})}"
                                class="btn btn-outline-primary btn-sm text-center">Appointments</a>
                         </div>
                     </div>

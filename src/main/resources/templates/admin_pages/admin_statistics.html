@@ -14,7 +14,7 @@
 
     <form th:action="@{/admin/statistics}" method="post" class="row g-3 mb-4">
         <div class="col-md-4">
-            <label for="doctor" class="form-label">Doctor</label>
+            <label for="doctor" class="form-label">Filter By Doctor:</label>
             <select id="doctor" name="data" class="form-select" required>
                 <option value="">-- Select Doctor --</option>
                 <option th:each="d : ${doctors}"

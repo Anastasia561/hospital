@@ -1,31 +1,36 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.hospital.dto.AppointmentDto;
+import pl.edu.hospital.dto.AppointmentForDoctorDto;
+import pl.edu.hospital.dto.AppointmentForPatientDto;
 import pl.edu.hospital.entity.Appointment;
+import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;
+import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.repository.AppointmentRepository;
+import pl.edu.hospital.repository.DoctorRepository;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, PatientRepository patientRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository, PatientRepository patientRepository,
+                              DoctorRepository doctorRepository) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
+        this.doctorRepository = doctorRepository;
     }
 
     public List<Appointment> getAll() {
@@ -45,27 +50,49 @@ public class AppointmentService {
         return statistics;
     }
 
-    public LinkedHashMap<LocalDate, List<AppointmentDto>> getAllForDoctorByUsernameInRange(String username, LocalDate start, LocalDate end) {
-        return appointmentRepository.findByDoctorUsernameInRange(username, start, end)
-                .stream()
+    public LinkedHashMap<LocalDate, List<AppointmentForPatientDto>> getAppointmentsForPatientFiltered(
+            String username,
+            LocalDate startDate,
+            LocalDate endDate,
+            Status status,
+            Specialization specialization
+    ) {
+        List<Appointment> allAppointments =
+                appointmentRepository.findByPatientUsernameInRange(username, startDate, endDate);
+
+        return allAppointments.stream()
                 .map(a -> {
-                    Optional<Patient> patient = patientRepository.findById(a.getPatient().getId());
-                    return AppointmentMapper.toAppointmentDto(a, patient.get());
+                    Doctor doctor = doctorRepository.findById(a.getDoctor().getId()).get();
+                    return AppointmentMapper.toAppointmentForPatientDto(a, doctor);
                 })
-                .sorted(Comparator.comparing(AppointmentDto::getDate).thenComparing(AppointmentDto::getStartTime))
-                .collect(Collectors.groupingBy(AppointmentDto::getDate, LinkedHashMap::new, Collectors.toList()));
+                .filter(a -> status == null || a.getStatus() == status)
+                .filter(a -> specialization == null || a.getSpecialization() == specialization)
+                .collect(Collectors.groupingBy(
+                        AppointmentForPatientDto::getDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
     }
 
-    public LinkedHashMap<LocalDate, List<AppointmentDto>> getAllForDoctorByUsernameInRangeWithStatus(String username,
-                                                                                                     LocalDate start, LocalDate end, Status status) {
-        return appointmentRepository.findByDoctorUsernameInRange(username, start, end)
-                .stream()
+    public LinkedHashMap<LocalDate, List<AppointmentForDoctorDto>> getAppointmentsForDoctorFiltered(
+            String username,
+            LocalDate startDate,
+            LocalDate endDate,
+            Status status
+    ) {
+        List<Appointment> allAppointments =
+                appointmentRepository.findByDoctorUsernameInRange(username, startDate, endDate);
+
+        return allAppointments.stream()
                 .map(a -> {
-                    Optional<Patient> patient = patientRepository.findById(a.getPatient().getId());
-                    return AppointmentMapper.toAppointmentDto(a, patient.get());
+                    Patient patient = patientRepository.findById(a.getPatient().getId()).get();
+                    return AppointmentMapper.toAppointmentForDoctorDto(a, patient);
                 })
-                .filter(a -> a.getStatus() == status)
-                .sorted(Comparator.comparing(AppointmentDto::getDate).thenComparing(AppointmentDto::getStartTime))
-                .collect(Collectors.groupingBy(AppointmentDto::getDate, LinkedHashMap::new, Collectors.toList()));
+                .filter(a -> status == null || a.getStatus() == status)
+                .collect(Collectors.groupingBy(
+                        AppointmentForDoctorDto::getDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
     }
 }

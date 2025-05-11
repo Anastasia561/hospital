@@ -1,17 +1,18 @@
 package pl.edu.hospital.dto;
 
+import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class AppointmentDto {
+public class AppointmentForPatientDto {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private Status status;
-    private String patientFullName;
-    private String patientPhone;
+    private String doctorFullName;
+    private Specialization specialization;
 
     public LocalDate getDate() {
         return date;
@@ -45,19 +46,19 @@ public class AppointmentDto {
         this.status = status;
     }
 
-    public String getPatientFullName() {
-        return patientFullName;
+    public String getDoctorFullName() {
+        return doctorFullName;
     }
 
-    public void setPatientFullName(String patientFullName) {
-        this.patientFullName = patientFullName;
+    public void setDoctorFullName(String doctorFullName) {
+        this.doctorFullName = doctorFullName;
     }
 
-    public String getPatientPhone() {
-        return patientPhone;
+    public Specialization getSpecialization() {
+        return specialization;
     }
 
-    public void setPatientPhone(String patientPhone) {
-        this.patientPhone = patientPhone;
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
     }
 }

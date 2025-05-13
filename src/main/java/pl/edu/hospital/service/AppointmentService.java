@@ -33,20 +33,14 @@ public class AppointmentService {
         this.doctorRepository = doctorRepository;
     }
 
-    public List<Appointment> getAll() {
-        return appointmentRepository.findAll();
-    }
-
     public Map<Status, Integer> getStatisticsForDoctorAndPeriod(String username, LocalDate startDate, LocalDate endDate) {
         HashMap<Status, Integer> statistics = new HashMap<>();
 
-        Integer scheduledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
-        Integer canceledApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
-        Integer completedApp = appointmentRepository.countByDoctorUsername(username, Status.SCHEDULED, startDate, endDate);
+        for (Status s : Status.values()) {
+            Integer count = appointmentRepository.countByDoctorUsername(username, s, startDate, endDate);
+            statistics.put(s, count);
+        }
 
-        statistics.put(Status.SCHEDULED, scheduledApp);
-        statistics.put(Status.CANCELLED, canceledApp);
-        statistics.put(Status.COMPLETED, completedApp);
         return statistics;
     }
 

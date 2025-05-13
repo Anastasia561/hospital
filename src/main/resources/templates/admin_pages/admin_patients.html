@@ -10,6 +10,16 @@
      th:replace="~{fragments/nav :: nav-admin}"></div>
 
 <div layout:fragment="content">
+    <form class="row g-3 mb-4" method="get" th:action="@{/admin/patients}">
+        <div class="col-md-4">
+            <label for="email" class="form-label">Search by Email</label>
+            <input type="text" id="email" name="email" class="form-control" placeholder="Enter email"
+                   th:value="${param.email}">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
     <h1>Patients</h1>
     <div class="row row-cols-1 g-4 mt-4" th:each="p : ${patients}">
         <div class="col">
@@ -36,6 +46,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="py-5 align-items-center">
+        <div th:if="${errorMessage}" class="alert alert-danger text-center">
+            <p th:text="${errorMessage}"></p>
         </div>
     </div>
 </div>

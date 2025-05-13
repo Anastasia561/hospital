@@ -19,7 +19,6 @@ import pl.edu.hospital.dto.PatientForAdminDto;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
-import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
@@ -39,15 +38,13 @@ public class AdminController {
     private final AppointmentService appointmentService;
     private final PatientService patientService;
     private final DoctorService doctorService;
-    private final AdminService adminService;
     private final ConsultationService consultationService;
 
     public AdminController(AppointmentService appointmentService, PatientService patientService,
-                           DoctorService doctorService, AdminService adminService, ConsultationService consultationService) {
+                           DoctorService doctorService, ConsultationService consultationService) {
         this.appointmentService = appointmentService;
         this.patientService = patientService;
         this.doctorService = doctorService;
-        this.adminService = adminService;
         this.consultationService = consultationService;
     }
 
@@ -58,6 +55,9 @@ public class AdminController {
 
     @GetMapping("/info")
     public String getStatistics(Model model) {
+        if (doctorService.getAllForAdmin().isEmpty()) {
+            model.addAttribute("errorMessage", "No data found");
+        }
         model.addAttribute("doctors", doctorService.getAllForAdmin());
         return "admin_pages/admin_statistics";
     }
@@ -87,8 +87,13 @@ public class AdminController {
     }
 
     @GetMapping("/patients")
-    public String getPatients(Model model) {
-        List<PatientForAdminDto> patients = patientService.getAllForAdmin();
+    public String getPatients(@RequestParam(required = false) String email, Model model) {
+        List<PatientForAdminDto> patients = (email == null || email.isBlank())
+                ? patientService.getAllForAdmin()
+                : patientService.getAllForAdminByEmail(email);
+        if (patients.isEmpty()) {
+            model.addAttribute("errorMessage", "No data found");
+        }
         model.addAttribute("patients", patients);
         return "admin_pages/admin_patients";
     }
@@ -98,6 +103,10 @@ public class AdminController {
         List<DoctorForAdminDto> doctors = (specialization == null || specialization.isBlank())
                 ? doctorService.getAllForAdmin()
                 : doctorService.getAllBySpecialization(Specialization.valueOf(specialization));
+
+        if(doctors.isEmpty()){
+            model.addAttribute("errorMessage", "No data found");
+        }
 
         model.addAttribute("specializations", Specialization.values());
         model.addAttribute("selectedSpecialization", specialization);

@@ -8,6 +8,7 @@ import pl.edu.hospital.mapper.PatientMapper;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -24,12 +25,16 @@ public class PatientService {
                 .toList();
     }
 
-    public PatientForScheduleDto getPatientById(int id) {
-        return PatientMapper.toPatientForScheduleDto(patientRepository.findById(id).get());
-    }
-
     public String getPatientFullNameByUsername(String username) {
         Patient p = patientRepository.findByUsername(username);
         return p.getFirstName() + " " + p.getLastName();
     }
+
+    public List<PatientForAdminDto> getAllForAdminByEmail(String email) {
+        return patientRepository.getPatientsByEmail(email)
+                .stream()
+                .map(PatientMapper::toPatientForAdminDto)
+                .toList();
+    }
+
 }

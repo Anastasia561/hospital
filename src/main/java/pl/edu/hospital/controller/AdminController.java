@@ -19,6 +19,8 @@ import pl.edu.hospital.dto.PatientForAdminDto;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
+import pl.edu.hospital.exception.DoctorNotFoundException;
+import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
@@ -104,7 +106,7 @@ public class AdminController {
                 ? doctorService.getAllForAdmin()
                 : doctorService.getAllBySpecialization(Specialization.valueOf(specialization));
 
-        if(doctors.isEmpty()){
+        if (doctors.isEmpty()) {
             model.addAttribute("errorMessage", "No data found");
         }
 
@@ -116,17 +118,23 @@ public class AdminController {
 
     @GetMapping("/doctors/{username}/schedule")
     public String getDoctorSchedule(@PathVariable String username, Model model) {
-        String dFullName = doctorService.getDoctorFullNameByUsername(username);
-        Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
-                .getAllByDoctorUsername(username).stream()
-                .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
+        try {
+            String dFullName = doctorService.getDoctorFullNameByUsername(username);
+            Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
+                    .getAllByDoctorUsername(username).stream()
+                    .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
 
-        model.addAttribute("days", WorkingDay.values());
-        List<WorkingDay> freeDays = Arrays.stream(WorkingDay.values()).filter(d -> !scheduleByDay.containsKey(d)).toList();
-        model.addAttribute("freeDays", freeDays);
-        model.addAttribute("username", username);
-        model.addAttribute("dFullName", dFullName);
-        model.addAttribute("scheduleByDay", scheduleByDay);
+            model.addAttribute("days", WorkingDay.values());
+            List<WorkingDay> freeDays = Arrays.stream(WorkingDay.values()).filter(d -> !scheduleByDay.containsKey(d)).toList();
+            model.addAttribute("freeDays", freeDays);
+            model.addAttribute("username", username);
+            model.addAttribute("dFullName", dFullName);
+            model.addAttribute("scheduleByDay", scheduleByDay);
+
+        } catch (DoctorNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
         return "admin_pages/admin_doctor_schedule";
     }
 
@@ -181,15 +189,22 @@ public class AdminController {
 
     @GetMapping("/doctors/{username}/appointments")
     public String getAppointmentsForDoctor(@PathVariable String username, Model model) {
-        model.addAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
-        model.addAttribute("statuses", Status.values());
+        try {
+            model.addAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
+            model.addAttribute("statuses", Status.values());
+        } catch (DoctorNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
         return "admin_pages/admin_doctor_appointment";
     }
 
     @PostMapping("/patients/{username}/apps")
     public RedirectView getAppointmentsForPatientInRange(@PathVariable String username,
-                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                         LocalDate startDate,
+                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                         LocalDate endDate,
                                                          @RequestParam(required = false) Status status,
                                                          @RequestParam(required = false) Specialization specialization,
                                                          RedirectAttributes redirectAttributes) {
@@ -214,9 +229,14 @@ public class AdminController {
 
     @GetMapping("/patients/{username}/appointments")
     public String getAppointmentsForPatient(@PathVariable String username, Model model) {
-        model.addAttribute("specializations", Specialization.values());
-        model.addAttribute("statuses", Status.values());
-        model.addAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
+        try {
+            model.addAttribute("specializations", Specialization.values());
+            model.addAttribute("statuses", Status.values());
+            model.addAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
+        } catch (PatientNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
         return "admin_pages/admin_patient_appointment";
     }
 }

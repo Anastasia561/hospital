@@ -29,4 +29,3 @@ public class AppointmentMapper {
         return dto;
     }
 }
-

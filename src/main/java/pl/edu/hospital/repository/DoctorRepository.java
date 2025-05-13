@@ -6,10 +6,11 @@ import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.enums.Specialization;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
-    Doctor findByUsername(String username);
+    Optional<Doctor> findByUsername(String username);
 
     List<Doctor> findAllBySpecialization(Specialization specialization);
 }

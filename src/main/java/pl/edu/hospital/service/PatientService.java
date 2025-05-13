@@ -2,13 +2,12 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.PatientForAdminDto;
-import pl.edu.hospital.dto.PatientForScheduleDto;
 import pl.edu.hospital.entity.Patient;
+import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.PatientMapper;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -25,8 +24,9 @@ public class PatientService {
                 .toList();
     }
 
-    public String getPatientFullNameByUsername(String username) {
-        Patient p = patientRepository.findByUsername(username);
+    public String getPatientFullNameByUsername(String username) throws PatientNotFoundException {
+        Patient p = patientRepository.findByUsername(username)
+                .orElseThrow(() -> new PatientNotFoundException(username));
         return p.getFirstName() + " " + p.getLastName();
     }
 
@@ -36,5 +36,4 @@ public class PatientService {
                 .map(PatientMapper::toPatientForAdminDto)
                 .toList();
     }
-
 }

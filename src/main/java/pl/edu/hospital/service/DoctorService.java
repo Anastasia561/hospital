@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.enums.Specialization;
+import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.mapper.DoctorMapper;
 import pl.edu.hospital.repository.DoctorRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -25,8 +25,9 @@ public class DoctorService {
                 .toList();
     }
 
-    public String getDoctorFullNameByUsername(String username) {
-        Doctor d = doctorRepository.findByUsername(username);
+    public String getDoctorFullNameByUsername(String username) throws DoctorNotFoundException {
+        Doctor d = doctorRepository.findByUsername(username)
+                .orElseThrow(() -> new DoctorNotFoundException(username));
         return d.getFirstName() + " " + d.getLastName();
     }
 

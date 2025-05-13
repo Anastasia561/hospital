@@ -8,6 +8,8 @@ import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
+import pl.edu.hospital.exception.DoctorNotFoundException;
+import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.repository.AppointmentRepository;
 import pl.edu.hospital.repository.DoctorRepository;
@@ -56,7 +58,8 @@ public class AppointmentService {
 
         return allAppointments.stream()
                 .map(a -> {
-                    Doctor doctor = doctorRepository.findById(a.getDoctor().getId()).get();
+                    Doctor doctor = doctorRepository.findById(a.getDoctor().getId())
+                            .orElseThrow(() -> new DoctorNotFoundException(a.getDoctor().getUsername()));
                     return AppointmentMapper.toAppointmentForPatientDto(a, doctor);
                 })
                 .filter(a -> status == null || a.getStatus() == status)
@@ -79,7 +82,8 @@ public class AppointmentService {
 
         return allAppointments.stream()
                 .map(a -> {
-                    Patient patient = patientRepository.findById(a.getPatient().getId()).get();
+                    Patient patient = patientRepository.findById(a.getPatient().getId())
+                            .orElseThrow(() -> new PatientNotFoundException(a.getPatient().getUsername()));
                     return AppointmentMapper.toAppointmentForDoctorDto(a, patient);
                 })
                 .filter(a -> status == null || a.getStatus() == status)

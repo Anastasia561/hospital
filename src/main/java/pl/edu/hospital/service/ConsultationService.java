@@ -2,11 +2,10 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.ConsultationDto;
-import pl.edu.hospital.dto.DoctorForAdminDto;
 import pl.edu.hospital.entity.Consultation;
 import pl.edu.hospital.entity.Doctor;
+import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.mapper.ConsultationMapper;
-import pl.edu.hospital.mapper.DoctorMapper;
 import pl.edu.hospital.repository.ConsultationRepository;
 import pl.edu.hospital.repository.DoctorRepository;
 
@@ -40,8 +39,9 @@ public class ConsultationService {
         }
     }
 
-    public void createConsultation(ConsultationDto dto) {
-        Doctor doctor = doctorRepository.findByUsername(dto.getDoctorUsername());
+    public void createConsultation(ConsultationDto dto) throws DoctorNotFoundException {
+        Doctor doctor = doctorRepository.findByUsername(dto.getDoctorUsername())
+                .orElseThrow(() -> new DoctorNotFoundException(dto.getDoctorUsername()));
         Consultation consultation = ConsultationMapper.toConsultation(dto, doctor);
         consultationRepository.save(consultation);
     }

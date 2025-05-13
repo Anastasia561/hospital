@@ -24,5 +24,4 @@ public class PatientMapper {
         dto.setEmail(patient.getEmail());
         return dto;
     }
-
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Doctor</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-doctor}"></div>
+
+<div layout:fragment="content">
+    <h3>Weekly Schedule</h3>
+
+    <div class="calendar mt-4">
+        <div th:each="entry : ${scheduleByDay}">
+            <div class="day-column">
+                <h5 th:text="${entry.key.name()}"></h5>
+
+                <div th:each="c : ${entry.value}">
+                    <div class="consultation">
+                        <strong th:text="${c.startTime}"></strong><br/>
+                        <strong th:text="${c.endTime}"></strong><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5 align-items-center">
+        <div th:if="${errorMessage}" class="alert alert-danger text-center">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -89,20 +89,7 @@ footer {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
-}
-
-.day-column {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-}
-
-.consultation {
-    background-color: #d1e7dd;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-left: 4px solid #0f5132;
-    border-radius: 4px;
+    align-items: start;
 }
 
 .calendar-grid {
@@ -113,21 +100,33 @@ footer {
     width: 100%;
 }
 
+.consultation {
+    background-color: #d1e7dd;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #0f5132;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    height: 200px;
+}
+
 .day-column {
     background-color: #ffffff;
     padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 8px;
-    min-height: 250px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    height: 200px;
+    min-height: 120px;
+    flex-grow: 0;
 }
 
 .appointment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Reduced min */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
 }
 

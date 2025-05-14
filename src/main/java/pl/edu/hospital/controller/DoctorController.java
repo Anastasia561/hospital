@@ -42,10 +42,7 @@ public class DoctorController {
     }
 
     @GetMapping("/home")
-    public String home(Model model) {
-        //using authentication
-        String dFullName = "Rafael Garcia";
-        model.addAttribute("dFullName", dFullName);
+    public String home() {
         return "doctor_pages/doctor_home";
     }
 

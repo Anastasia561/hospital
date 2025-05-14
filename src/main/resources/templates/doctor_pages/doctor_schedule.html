@@ -12,15 +12,15 @@
 <div layout:fragment="content">
     <h3>Weekly Schedule</h3>
 
-    <div class="calendar mt-4">
+    <div class="calendar mt-5">
         <div th:each="entry : ${scheduleByDay}">
-            <div class="day-column-doctor">
-                <h5 th:text="${entry.key.name()}"></h5>
+            <div class="day-column-doctor text-center">
+                <h5 th:text="${entry.key.name()}"></h5><br/>
 
                 <div th:each="c : ${entry.value}">
-                    <div class="consultation-doctor">
-                        <strong th:text="${c.startTime}"></strong><br/>
-                        <strong th:text="${c.endTime}"></strong><br/>
+                    <div class="consultation-doctor text-center fs-5 align-content-center">
+                        <strong th:text="${c.startTime}"></strong> -
+                        <strong th:text="${c.endTime}"></strong>
                     </div>
                 </div>
             </div>

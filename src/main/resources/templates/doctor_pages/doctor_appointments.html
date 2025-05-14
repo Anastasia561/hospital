@@ -11,8 +11,8 @@
 
 <div layout:fragment="content">
     <h3>Appointments</h3>
-    <form th:action="@{/doctor/apps}" method="post" class="row g-3 mb-4">
-        <div class="col-md-3">
+    <form th:action="@{/doctor/apps}" method="post" class="row g-3 mb-4 mt-3">
+        <div class="col-md-3 mt-3">
             <label for="startDate" class="form-label">Start Date</label>
             <input type="date" id="startDate" name="startDate" class="form-control" required>
         </div>
@@ -35,7 +35,7 @@
     <div class="calendar mt-4">
         <div class="calendar-grid">
             <div class="day-column" th:each="entry : ${appointments}">
-                <h4 th:text="${' '+entry.key}">Date</h4>
+                <h4 th:text="${' '+entry.key}"></h4>
                 <div class="appointment-grid">
                     <div class="appointment-block" th:each="a : ${entry.value}">
                         <div class="time-range">

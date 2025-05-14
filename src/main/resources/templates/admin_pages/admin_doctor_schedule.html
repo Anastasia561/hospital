@@ -12,17 +12,17 @@
 <div layout:fragment="content">
     <h3 th:text="'Weekly Schedule for Doctor ' + ${dFullName}"></h3>
 
-    <div class="calendar mt-4">
+    <div class="calendar mt-5">
         <div th:each="entry : ${scheduleByDay}">
-            <div class="day-column">
+            <div class="day-column text-center">
                 <h5 th:text="${entry.key.name()}"></h5>
 
                 <div th:each="c : ${entry.value}">
-                    <div class="consultation">
+                    <div class="consultation align-content-center fs-5">
                         <strong th:text="${c.startTime}"></strong><br/>
                         <strong th:text="${c.endTime}"></strong><br/>
 
-                        <div class="d-flex gap-2 mt-2">
+                        <div class="d-flex gap-2 mt-2 justify-content-center">
                             <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal"
                                     th:attr="data-bs-target=${'#editModal-' + c.id}">
                                 Edit
@@ -76,7 +76,7 @@
     </div>
 
 
-    <div class="mb-4 mt-3">
+    <div class="mt-5 d-flex justify-content-center">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addConsultationModal">
             Add Consultation Hours
         </button>

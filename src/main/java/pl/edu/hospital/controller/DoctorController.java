@@ -12,12 +12,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.hospital.dto.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.ConsultationDto;
+import pl.edu.hospital.dto.RecordForDoctorDto;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
 import pl.edu.hospital.exception.DoctorNotFoundException;
+import pl.edu.hospital.exception.PatientNotFoundException;
+import pl.edu.hospital.exception.RecordNotFoundException;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
+import pl.edu.hospital.service.RecordService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -33,12 +37,14 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
     private final AppointmentService appointmentService;
+    private final RecordService recordService;
 
     public DoctorController(DoctorService doctorService, ConsultationService consultationService,
-                            AppointmentService appointmentService) {
+                            AppointmentService appointmentService, RecordService recordService) {
         this.doctorService = doctorService;
         this.consultationService = consultationService;
         this.appointmentService = appointmentService;
+        this.recordService = recordService;
     }
 
     @GetMapping("/home")
@@ -111,5 +117,36 @@ public class DoctorController {
         }
 
         return "doctor_pages/doctor_appointments";
+    }
+
+    @PostMapping("/appointments/cancel")
+    public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
+                                          RedirectAttributes redirectAttributes) {
+        //logic
+        RedirectView r = new RedirectView("/doctor/appointments");
+        r.setContextRelative(true);
+        return r;
+    }
+
+    @PostMapping("/appointments/complete")
+    public RedirectView completeAppointment(@RequestParam(name = "id") int appointmentId,
+                                            RedirectAttributes redirectAttributes) {
+        //logic
+        RedirectView r = new RedirectView("/doctor/appointments");
+        r.setContextRelative(true);
+        return r;
+
+    }
+
+    @GetMapping("/appointments/record/{appId}")
+    public String showAppointmentRecord(@PathVariable int appId, Model model) {
+        try {
+            RecordForDoctorDto record = recordService.getRecordForDoctorByAppointmentId(appId);
+            model.addAttribute("record", record);
+        } catch (PatientNotFoundException | RecordNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "doctor_pages/doctor_record";
     }
 }

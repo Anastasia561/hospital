@@ -6,12 +6,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class AppointmentForDoctorDto {
+    private Integer id;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private Status status;
     private String patientFullName;
     private String patientPhone;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public LocalDate getDate() {
         return date;

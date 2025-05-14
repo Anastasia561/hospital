@@ -9,6 +9,7 @@ import pl.edu.hospital.entity.Patient;
 public class AppointmentMapper {
     public static AppointmentForDoctorDto toAppointmentForDoctorDto(Appointment appointment, Patient patient) {
         AppointmentForDoctorDto dto = new AppointmentForDoctorDto();
+        dto.setId(appointment.getId());
         dto.setDate(appointment.getDate());
         dto.setStartTime(appointment.getTime());
         dto.setEndTime(appointment.getTime().plusHours(1)); //1 hour for appointment

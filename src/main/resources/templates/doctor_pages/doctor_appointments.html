@@ -10,7 +10,15 @@
      th:replace="~{fragments/nav :: nav-doctor}"></div>
 
 <div layout:fragment="content">
-    <h3>Appointments</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Appointments</h3>
+        <form th:action="@{/doctor/apps}" method="post">
+            <input type="hidden" name="startDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+            <input type="hidden" name="endDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+            <button type="submit" class="btn btn-outline-primary">Show Today's Appointments</button>
+        </form>
+    </div>
+
     <form th:action="@{/doctor/apps}" method="post" class="row g-3 mb-4 mt-3">
         <div class="col-md-3 mt-3">
             <label for="startDate" class="form-label">Start Date</label>
@@ -45,6 +53,24 @@
                         <span th:text="${a.patientFullName}"></span>
                         <span class="email" th:text="${a.patientPhone}"></span>
                         <i><strong><span th:text="${a.status}"></span></strong></i>
+
+                        <div class="d-flex gap-2 mt-4" th:if="${a.status.name() =='SCHEDULED'}">
+                            <form th:action="@{/doctor/appointments/complete}" method="post" th:object="${a}">
+                                <input type="hidden" name="id" th:value="${a.id}"/>
+                                <button type="submit" class="btn btn-sm btn-primary">Complete</button>
+                            </form>
+
+                            <form th:action="@{/doctor/appointments/cancel}" method="post" th:object="${a}">
+                                <input type="hidden" name="id" th:value="${a.id}"/>
+                                <button type="submit" class="btn btn-sm btn-secondary">Cancel</button>
+                            </form>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4" th:if="${a.status.name() =='COMPLETED'}">
+                            <a th:href="@{'/doctor/appointments/record/' + ${a.id}}"
+                               class="btn btn-sm btn-primary">Record</a>
+                        </div>
+
                     </div>
                 </div>
             </div>

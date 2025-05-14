@@ -2,10 +2,13 @@ package pl.edu.hospital.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Patient extends Person {
@@ -16,6 +19,8 @@ public class Patient extends Person {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+    @OneToMany(mappedBy = "patient", fetch = FetchType.EAGER)
+    private List<Appointment> appointments;
 
     public LocalDate getBirthDate() {
         return birthDate;

@@ -1,50 +1,15 @@
-package pl.edu.hospital.entity;
+package pl.edu.hospital.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import pl.edu.hospital.entity.enums.Frequency;
 
 import java.time.LocalDate;
 
-@Entity
-public class Prescription {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class PrescriptionDto {
     private String medicine;
     private Integer dosage;
-    @Column(name = "start_date")
     private LocalDate startDate;
-    @Column(name = "end_date")
     private LocalDate endDate;
-    @Enumerated(EnumType.STRING)
     private Frequency frequency;
-    @ManyToOne
-    @JoinColumn(name = "record_id")
-    private Record record;
-
-    public Record getRecord() {
-        return record;
-    }
-
-    public void setRecord(Record record) {
-        this.record = record;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getMedicine() {
         return medicine;

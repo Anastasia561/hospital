@@ -127,7 +127,6 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    padding-top: 1rem;
 }
 
 .day-column-doctor {

@@ -1,17 +1,13 @@
 package pl.edu.hospital.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import pl.edu.hospital.entity.enums.Specialization;
-import pl.edu.hospital.entity.enums.WorkingDay;
-import pl.edu.hospital.entity.enums.converter.WorkingDaysListConverter;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity

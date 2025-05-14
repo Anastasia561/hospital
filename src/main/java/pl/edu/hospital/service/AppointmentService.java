@@ -16,6 +16,7 @@ import pl.edu.hospital.repository.DoctorRepository;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,7 +68,12 @@ public class AppointmentService {
                 .collect(Collectors.groupingBy(
                         AppointmentForPatientDto::getDate,
                         LinkedHashMap::new,
-                        Collectors.toList()
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> list.stream()
+                                        .sorted(Comparator.comparing(AppointmentForPatientDto::getStartTime))
+                                        .collect(Collectors.toList())
+                        )
                 ));
     }
 
@@ -90,7 +96,12 @@ public class AppointmentService {
                 .collect(Collectors.groupingBy(
                         AppointmentForDoctorDto::getDate,
                         LinkedHashMap::new,
-                        Collectors.toList()
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> list.stream()
+                                        .sorted(Comparator.comparing(AppointmentForDoctorDto::getStartTime))
+                                        .collect(Collectors.toList())
+                        )
                 ));
     }
 }

@@ -1,10 +1,13 @@
 package pl.edu.hospital.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 import java.util.List;
 
@@ -15,8 +18,19 @@ public class Record {
     private Integer id;
     private String diagnosis;
     private String summary;
-    @OneToMany
+    @OneToOne
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
+    @OneToMany(mappedBy = "record", fetch = FetchType.EAGER)
     private List<Prescription> prescription;
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
+    }
 
     public Integer getId() {
         return id;

@@ -1,5 +1,6 @@
 package pl.edu.hospital.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Record {
     @OneToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
-    @OneToMany(mappedBy = "record", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "record", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Prescription> prescription;
 
     public Appointment getAppointment() {

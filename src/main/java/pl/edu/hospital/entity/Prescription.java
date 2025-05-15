@@ -19,7 +19,7 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String medicine;
-    private Integer dosage;
+    private String dosage;
     @Column(name = "start_date")
     private LocalDate startDate;
     @Column(name = "end_date")
@@ -54,11 +54,11 @@ public class Prescription {
         this.medicine = medicine;
     }
 
-    public Integer getDosage() {
+    public String getDosage() {
         return dosage;
     }
 
-    public void setDosage(Integer dosage) {
+    public void setDosage(String dosage) {
         this.dosage = dosage;
     }
 

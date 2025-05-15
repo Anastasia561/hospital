@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class PrescriptionDto {
     private String medicine;
-    private Integer dosage;
+    private String dosage;
     private LocalDate startDate;
     private LocalDate endDate;
     private Frequency frequency;
@@ -19,11 +19,11 @@ public class PrescriptionDto {
         this.medicine = medicine;
     }
 
-    public Integer getDosage() {
+    public String getDosage() {
         return dosage;
     }
 
-    public void setDosage(Integer dosage) {
+    public void setDosage(String dosage) {
         this.dosage = dosage;
     }
 

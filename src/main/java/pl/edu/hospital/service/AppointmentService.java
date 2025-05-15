@@ -8,6 +8,7 @@ import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
+import pl.edu.hospital.exception.AppointmentNotFoundException;
 import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.AppointmentMapper;
@@ -103,5 +104,17 @@ public class AppointmentService {
                                         .collect(Collectors.toList())
                         )
                 ));
+    }
+
+    public void updateAppointmentStatus(Status newStatus, int id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException(id));
+        appointment.setStatus(newStatus);
+        appointmentRepository.save(appointment);
+    }
+
+    public LocalDate getAppointmentDateById(int id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException(id)).getDate();
     }
 }

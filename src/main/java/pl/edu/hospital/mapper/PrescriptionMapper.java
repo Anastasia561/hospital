@@ -13,4 +13,14 @@ public class PrescriptionMapper {
         dto.setEndDate(prescription.getEndDate());
         return dto;
     }
+
+    public static Prescription toPrescription(PrescriptionDto dto) {
+        Prescription prescription = new Prescription();
+        prescription.setDosage(dto.getDosage());
+        prescription.setMedicine(dto.getMedicine());
+        prescription.setFrequency(dto.getFrequency());
+        prescription.setStartDate(dto.getStartDate());
+        prescription.setEndDate(dto.getEndDate());
+        return prescription;
+    }
 }

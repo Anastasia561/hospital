@@ -2,6 +2,7 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.dto.PatientForRecordDto;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.PatientMapper;
@@ -35,5 +36,11 @@ public class PatientService {
                 .stream()
                 .map(PatientMapper::toPatientForAdminDto)
                 .toList();
+    }
+
+    public PatientForRecordDto getPatientByAppointmentId(int appId) {
+        Patient patient = patientRepository.findPatientByAppointmentId(appId)
+                .orElseThrow(() -> new PatientNotFoundException(appId + ""));
+        return PatientMapper.toPatientForRecordDto(patient);
     }
 }

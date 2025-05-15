@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Doctor</title>
+    <script th:src="@{/scripts/prescription_addition.js}"></script>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-doctor}"></div>
+
+<div layout:fragment="content" class="container mt-5">
+    <h3 class="mb-4">Medical Record Form</h3>
+
+    <form th:action="@{/doctor/appointments/record/save}" th:object="${recordDto}" method="post">
+        <input type="hidden" name="appId" th:value="${appId}"/>
+
+        <div class="card shadow p-4">
+            <h5>Patient Info</h5>
+            <p><strong>Name:</strong> <span th:text="${patient.fullName}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${patient.email}"></span></p>
+            <p><strong>Phone:</strong> <span th:text="${patient.phoneNumber}"></span></p>
+
+            <hr>
+
+            <h5>Appointment Info</h5>
+            <p><strong>Date:</strong> <span th:text="${''+appDate}"></span></p>
+
+            <hr>
+
+            <h5 class="mb-3">Medical Notes</h5>
+            <div class="mb-3">
+                <label>Diagnosis:</label>
+                <textarea class="form-control" th:field="*{diagnosis}" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Summary:</label>
+                <textarea class="form-control" th:field="*{summary}" required></textarea>
+            </div>
+
+            <hr>
+
+            <h5>Prescriptions</h5>
+            <div id="prescriptions-container">
+                <div th:each="prescription, iterStat : *{prescriptions}" class="row mb-2 prescription-block">
+                    <div class="col-md-3">
+                        <input class="form-control" placeholder="Medicine"
+                               th:field="*{prescriptions[__${iterStat.index}__].medicine}" required/>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="form-control" placeholder="Dosage"
+                               th:field="*{prescriptions[__${iterStat.index}__].dosage}" required/>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" th:field="*{prescriptions[__${iterStat.index}__].frequency}"
+                                required>
+                            <option value="" disabled selected>Select frequency</option>
+                            <option th:each="f : ${frequencies}" th:value="${f}" th:text="${f.label}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="form-control" type="date" required
+                               th:field="*{prescriptions[__${iterStat.index}__].startDate}"/>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="form-control" type="date"
+                               th:field="*{prescriptions[__${iterStat.index}__].endDate}"/>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removePrescription(this)">×
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addPrescription()">+ Add
+                    Prescription
+                </button>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                <a th:href="@{/doctor/appointments}" class="btn btn-lg btn-outline-primary">Cancel</a>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

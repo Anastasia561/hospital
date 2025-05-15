@@ -1,6 +1,8 @@
 package pl.edu.hospital.mapper;
 
+import pl.edu.hospital.dto.RecordCreationRequestDto;
 import pl.edu.hospital.dto.RecordForDoctorDto;
+import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.entity.Record;
 
@@ -18,5 +20,13 @@ public class RecordMapper {
         dto.setSummary(record.getSummary());
         dto.setDiagnosis(record.getDiagnosis());
         return dto;
+    }
+
+    public static Record toRecord(RecordCreationRequestDto dto, Appointment appointment) {
+        Record record = new Record();
+        record.setDiagnosis(dto.getDiagnosis());
+        record.setSummary(dto.getSummary());
+        record.setAppointment(appointment);
+        return record;
     }
 }

@@ -12,8 +12,8 @@
 <div layout:fragment="content" class="container mt-5">
     <h3 class="mb-4">Medical Record Details</h3>
 
-    <div class="card shadow p-4">
-        <h5 class="mb-3">Patient Information</h5>
+    <div class="card shadow p-4" th:if="${record!=null}">
+        <h5 class="mb-3">Patient Info</h5>
         <p><strong>Name:</strong> <span th:text="${record.patientFullName}"></span></p>
         <p><strong>Email:</strong> <span th:text="${record.patientEmail}"></span></p>
         <p><strong>Phone:</strong> <span th:text="${record.patientPhoneNumber}"></span></p>
@@ -50,8 +50,7 @@
                 <tr th:each="prescription : ${record.prescriptions}">
                     <td th:text="${prescription.medicine}"></td>
                     <td th:text="${prescription.dosage}"></td>
-                    <td th:text="${prescription.frequency.name() == 'NEEDED' ?
-                     'WHEN ' + prescription.frequency : prescription.frequency}"></td>
+                    <td th:text="${prescription.frequency.getLabel()}"></td>
 
                     <td th:text="|${' '+prescription.startDate}
                     ${prescription.endDate != null ? ' - ' + ' '+prescription.endDate : ' - no'}|"></td>
@@ -61,6 +60,12 @@
         </div>
         <div th:if="${#lists.isEmpty(record.prescriptions)}">
             <p class="text-muted">No prescriptions recorded</p>
+        </div>
+    </div>
+
+    <div class="py-5 align-items-center">
+        <div th:if="${errorMessage}" class="alert alert-danger text-center">
+            <p th:text="${errorMessage}"></p>
         </div>
     </div>
 </div>

@@ -2,7 +2,7 @@ package pl.edu.hospital.mapper;
 
 import org.springframework.stereotype.Component;
 import pl.edu.hospital.dto.PatientForAdminDto;
-import pl.edu.hospital.dto.PatientForScheduleDto;
+import pl.edu.hospital.dto.PatientForRecordDto;
 import pl.edu.hospital.entity.Patient;
 
 @Component
@@ -18,9 +18,10 @@ public class PatientMapper {
         return dto;
     }
 
-    public static PatientForScheduleDto toPatientForScheduleDto(Patient patient) {
-        PatientForScheduleDto dto = new PatientForScheduleDto();
+    public static PatientForRecordDto toPatientForRecordDto(Patient patient) {
+        PatientForRecordDto dto = new PatientForRecordDto();
         dto.setFullName(patient.getFirstName() + " " + patient.getLastName());
+        dto.setPhoneNumber(patient.getPhoneNumber());
         dto.setEmail(patient.getEmail());
         return dto;
     }

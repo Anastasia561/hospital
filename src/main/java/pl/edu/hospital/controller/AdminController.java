@@ -85,7 +85,7 @@ public class AdminController {
             Map<Status, Integer> statistics = appointmentService.getStatisticsForDoctorAndPeriod(dUsername, startDate, endDate);
             redirectAttributes.addFlashAttribute("statistics", statistics);
         }
-        return new RedirectView("info");
+        return new RedirectView("info", true, false);
     }
 
     @GetMapping("/patients")
@@ -139,27 +139,44 @@ public class AdminController {
     }
 
     @PostMapping("/consultations/edit")
-    public RedirectView saveEditedConsultation(@ModelAttribute ConsultationDto consultation) {
-        consultationService.updateConsultation(consultation);
-        RedirectView r = new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule");
-        r.setContextRelative(true);
-        return r;
+    public RedirectView saveEditedConsultation(@ModelAttribute ConsultationDto consultation,
+                                               RedirectAttributes redirectAttributes) {
+        if (consultation.getStartTime().isAfter(consultation.getEndTime()) ||
+                consultation.getStartTime().equals(consultation.getEndTime())) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Invalid time range for consultation hours");
+        } else {
+            consultationService.updateConsultation(consultation);
+        }
+        return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
+                true, false);
     }
 
     @PostMapping("/consultations/create")
-    public RedirectView createConsultation(@ModelAttribute ConsultationDto consultation) {
-        consultationService.createConsultation(consultation);
-        RedirectView r = new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule");
-        r.setContextRelative(true);
-        return r;
+    public RedirectView createConsultation(@ModelAttribute ConsultationDto consultation,
+                                           RedirectAttributes redirectAttributes) {
+        if (consultation.getStartTime().isAfter(consultation.getEndTime()) ||
+                consultation.getStartTime().equals(consultation.getEndTime())) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Invalid time range for consultation hours");
+        } else {
+            consultationService.createConsultation(consultation);
+        }
+        return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
+                true, false);
     }
 
     @PostMapping("/consultations/delete")
-    public RedirectView deleteConsultation(@RequestParam int id, @RequestParam String doctorUsername) {
-        consultationService.deleteConsultation(id);
-        RedirectView r = new RedirectView("/admin/doctors/" + doctorUsername + "/schedule");
-        r.setContextRelative(true);
-        return r;
+    public RedirectView deleteConsultation(@RequestParam int id, @RequestParam String doctorUsername,
+                                           RedirectAttributes redirectAttributes) {
+        try {
+            appointmentService.cancelForConsultation(id);
+            consultationService.deleteConsultation(id);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return new RedirectView("/admin/doctors/" + doctorUsername + "/schedule", true, false);
     }
 
     @PostMapping("/doctors/{username}/apps")
@@ -182,9 +199,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
 
-        RedirectView r = new RedirectView("/admin/doctors/" + username + "/appointments");
-        r.setContextRelative(true);
-        return r;
+        return new RedirectView("/admin/doctors/" + username + "/appointments", true, false);
     }
 
     @GetMapping("/doctors/{username}/appointments")
@@ -222,9 +237,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
 
-        RedirectView r = new RedirectView("/admin/patients/" + username + "/appointments");
-        r.setContextRelative(true);
-        return r;
+        return new RedirectView("/admin/patients/" + username + "/appointments", true, false);
     }
 
     @GetMapping("/patients/{username}/appointments")

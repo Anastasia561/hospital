@@ -21,6 +21,7 @@ public class AppointmentMapper {
 
     public static AppointmentForPatientDto toAppointmentForPatientDto(Appointment appointment, Doctor doctor) {
         AppointmentForPatientDto dto = new AppointmentForPatientDto();
+        dto.setId(appointment.getId());
         dto.setDate(appointment.getDate());
         dto.setStartTime(appointment.getTime());
         dto.setEndTime(appointment.getTime().plusHours(1)); //1 hour for appointment

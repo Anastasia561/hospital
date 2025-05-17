@@ -36,9 +36,10 @@
 <div th:fragment="nav-patient">
     <nav class="d-flex justify-content-center justify-content-md-end w-100">
         <div class="d-flex gap-3">
-            <a href="#" class="nav-link text-white rounded border border-0 p-2">Home</a>
-            <a href="#" class="nav-link text-white rounded border border-0 p-2">My Appointment</a>
-            <a href="#" class="nav-link text-white rounded border border-0 p-2">Doctors</a>
+            <a th:href="@{/patient/home}" class="nav-link text-white rounded border border-0 p-2">Home</a>
+            <a th:href="@{/patient/appointments}"
+               class="nav-link text-white rounded border border-0 p-2">Appointments</a>
+            <a href="#" class="nav-link text-white rounded border border-0 p-2">Consultation</a>
         </div>
         <div class="ms-4">
             <a href="#" class="nav-link text-white rounded border border-0 p-2">

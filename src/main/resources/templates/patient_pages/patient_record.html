@@ -7,16 +7,15 @@
 </head>
 <body>
 <div layout:fragment="navbar"
-     th:replace="~{fragments/nav :: nav-doctor}"></div>
+     th:replace="~{fragments/nav :: nav-patient}"></div>
 
 <div layout:fragment="content" class="container mt-5">
     <h3 class="mb-4">Medical Record Details</h3>
 
     <div class="card shadow p-4" th:if="${record!=null}">
-        <h5 class="mb-3">Patient Info</h5>
-        <p><strong>Name:</strong> <span th:text="${record.patientFullName}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${record.patientEmail}"></span></p>
-        <p><strong>Phone:</strong> <span th:text="${record.patientPhoneNumber}"></span></p>
+        <h5 class="mb-3">Doctor Info</h5>
+        <p><strong>Name:</strong> <span th:text="${record.doctorFullName}"></span></p>
+        <p><strong>Specialization:</strong> <span th:text="${record.specialization}"></span></p>
 
         <hr>
 

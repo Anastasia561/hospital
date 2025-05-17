@@ -7,12 +7,12 @@
 </head>
 <body>
 <div layout:fragment="navbar"
-     th:replace="~{fragments/nav :: nav-doctor}"></div>
+     th:replace="~{fragments/nav :: nav-patient}"></div>
 
 <div layout:fragment="content">
     <div th:fragment="content" class="text-center mt-4 mb-5">
         <h1>Welcome to MediCore</h1>
-        <h3>Your platform for managing patients and appointments efficiently</h3>
+        <h3>Your platform for managing healthcare and appointments efficiently</h3>
 
         <img th:src="@{/images/medicore_home.png}" alt="MediCore Banner" class="img-fluid mt-4"
              style="max-width: 600px;">

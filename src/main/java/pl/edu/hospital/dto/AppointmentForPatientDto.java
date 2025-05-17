@@ -7,12 +7,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class AppointmentForPatientDto {
+    private int id;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private Status status;
     private String doctorFullName;
     private Specialization specialization;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public LocalDate getDate() {
         return date;

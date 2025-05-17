@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import pl.edu.hospital.entity.enums.Specialization;
 
@@ -19,6 +20,8 @@ public class Doctor extends Person {
     private Specialization specialization;
     @OneToMany(mappedBy = "doctor")
     private List<Consultation> consultations;
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.EAGER)
+    private List<Appointment> appointments;
 
     public Integer getExperience() {
         return experience;

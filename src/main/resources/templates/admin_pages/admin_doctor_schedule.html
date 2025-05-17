@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout}">
 <head>
-    <title layout:fragment="title">Admin</title>
+    <title layout:fragment="title">Doctor schedule</title>
 </head>
 <body>
 <div layout:fragment="navbar"
@@ -79,7 +79,7 @@
     </div>
 
 
-    <div class="mt-5 d-flex justify-content-center">
+    <div class="mt-5 d-flex justify-content-center" th:if="${not #lists.isEmpty(freeDays)}">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addConsultationModal">
             Add Consultation Hours
         </button>

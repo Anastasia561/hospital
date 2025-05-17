@@ -4,15 +4,18 @@ import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.AppointmentForPatientDto;
 import pl.edu.hospital.entity.Appointment;
+import pl.edu.hospital.entity.Consultation;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.exception.AppointmentNotFoundException;
+import pl.edu.hospital.exception.ConsultationNotFoundException;
 import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.AppointmentMapper;
 import pl.edu.hospital.repository.AppointmentRepository;
+import pl.edu.hospital.repository.ConsultationRepository;
 import pl.edu.hospital.repository.DoctorRepository;
 import pl.edu.hospital.repository.PatientRepository;
 
@@ -23,18 +26,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final ConsultationRepository consultationRepository;
 
     public AppointmentService(AppointmentRepository appointmentRepository, PatientRepository patientRepository,
-                              DoctorRepository doctorRepository) {
+                              DoctorRepository doctorRepository, ConsultationRepository consultationRepository) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
+        this.consultationRepository = consultationRepository;
     }
 
     public Map<Status, Integer> getStatisticsForDoctorAndPeriod(String username, LocalDate startDate, LocalDate endDate) {
@@ -116,5 +122,13 @@ public class AppointmentService {
     public LocalDate getAppointmentDateById(int id) {
         return appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id)).getDate();
+    }
+
+    public void cancelForConsultation(int consultationId) {
+        Consultation consultation = consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new ConsultationNotFoundException(consultationId));
+        List<Appointment> apps = appointmentRepository.getAllDayOfWeekAndInTimeRange(consultation.getWorkingDay().getMysqlDay(),
+                consultation.getStartTime(), consultation.getEndTime());
+        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId()));
     }
 }

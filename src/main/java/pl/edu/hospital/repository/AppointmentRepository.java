@@ -7,6 +7,7 @@ import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.enums.Status;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -20,4 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     @Query("select a from Appointment a where a.patient.username=:username and (a.date between :start and :end)")
     List<Appointment> findByPatientUsernameInRange(String username, LocalDate start, LocalDate end);
+
+    @Query(value = "select a from Appointment a WHERE a.time BETWEEN :start AND :end AND DAYOFWEEK(a.date) = :workingDay")
+    List<Appointment> getAllDayOfWeekAndInTimeRange(int workingDay, LocalTime start, LocalTime end);
 }

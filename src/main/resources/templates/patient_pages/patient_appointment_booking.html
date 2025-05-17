@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Book Appointment</title>
+</head>
+<body>
+
+<div layout:fragment="navbar" th:replace="~{fragments/nav :: nav-patient}"></div>
+
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <h2 class="mb-4">Book Appointment with <span th:text="${doctor.fullName}"></span></h2>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <p><strong>Email:</strong> <span th:text="${doctor.email}"></span></p>
+                <p><strong>Specialization:</strong> <span th:text="${doctor.specialization}"></span></p>
+                <p><strong>Date:</strong> <span th:text="${date}"></span></p>
+            </div>
+        </div>
+
+        <form th:action="@{/patient/appointments/book}" method="post">
+            <input type="hidden" name="doctorUsername" th:value="${doctor.username}"/>
+            <input type="hidden" name="date" th:value="${date}"/>
+
+            <div class="mb-3">
+                <label for="time" class="form-label">Available Time Slots</label>
+                <select class="form-select" id="time" name="time" required>
+                    <option value="" disabled selected>Select a time</option>
+                    <option th:each="slot : ${availableSlots}"
+                            th:value="${slot}"
+                            th:text="${slot}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+            <a th:href="@{/patient/doctors}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

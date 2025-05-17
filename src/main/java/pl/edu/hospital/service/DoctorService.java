@@ -43,4 +43,10 @@ public class DoctorService {
         Doctor doctor = DoctorMapper.toDoctor(dto);
         doctorRepository.save(doctor);
     }
+
+    public DoctorForAdminDto findByUsername(String username) {
+        Doctor doctor = doctorRepository.findByUsername(username)
+                .orElseThrow(() -> new DoctorNotFoundException(username));
+        return DoctorMapper.toDoctorForAdminDto(doctor);
+    }
 }

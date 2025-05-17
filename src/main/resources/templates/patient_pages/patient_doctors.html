@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Doctors</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-patient}"></div>
+
+<div layout:fragment="content">
+    <h1>Doctors</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <form th:action="@{/patient/doctors}" method="get" class="d-flex align-items-center gap-2">
+            <label for="specialization" class="mb-0">Filter by Specialization:</label>
+            <select name="specialization" id="specialization" class="form-select w-auto">
+                <option value="" th:selected="${selectedSpecialization == null}">All</option>
+                <option th:each="s : ${specializations}"
+                        th:value="${s}"
+                        th:text="${s}"
+                        th:selected="${s == selectedSpecialization}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 g-4 mt-4" th:each="d : ${doctors}">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-8">
+                            <h3 class="card-title" th:text="${d.fullName}"></h3>
+                            <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${d.email}"></span></p>
+                            <p class="card-text mb-1"><strong>Years of experience:</strong> <span
+                                    th:text="${d.experience}"></span></p>
+                            <p class="card-text mb-1"><strong>Specialization:</strong> <span
+                                    th:text="${d.specialization}"></span></p>
+                            <p class="card-text mb-0"><strong>Employment date:</strong><span
+                                    th:text="${' ' + d.employmentDate}"></span></p>
+                        </div>
+
+                        <div class="col-md-4 d-flex flex-column align-items-end justify-content-center gap-2">
+                            <a th:href="@{/patient/doctors/{username}/schedule(username=${d.username})}"
+                               class="btn btn-outline-success btn-sm text-center">Schedule</a>
+                            <form th:action="@{/patient/doctors/book/{username}(username=${d.username})}"
+                                  method="get" class="d-flex gap-2">
+                                <input type="date" name="date" class="form-control form-control-sm" required/>
+                                <button type="submit" class="btn btn-outline-primary btn-sm">Book</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

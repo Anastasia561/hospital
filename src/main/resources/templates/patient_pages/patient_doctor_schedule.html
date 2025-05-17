@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Schedule</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-patient}"></div>
+
+<div layout:fragment="content">
+    <h3 th:text="'Weekly Schedule for Doctor ' + ${dFullName}"></h3>
+
+    <div class="calendar mt-5">
+        <div th:each="entry : ${scheduleByDay}">
+            <div class="day-column-doctor text-center">
+                <h5 th:text="${entry.key.name()}"></h5><br/>
+
+                <div th:each="c : ${entry.value}">
+                    <div class="consultation-doctor text-center fs-5 align-content-center">
+                        <strong th:text="${c.startTime}"></strong> -
+                        <strong th:text="${c.endTime}"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

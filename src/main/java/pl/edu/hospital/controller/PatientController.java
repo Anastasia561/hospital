@@ -88,8 +88,10 @@ public class PatientController {
     }
 
     @PostMapping("/appointments/cancel")
-    public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId) {
+    public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
+                                          RedirectAttributes redirectAttributes) {
         appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
+        redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
         return new RedirectView("/patient/appointments", true, false);
     }
 

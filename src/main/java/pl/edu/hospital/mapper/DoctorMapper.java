@@ -2,7 +2,10 @@ package pl.edu.hospital.mapper;
 
 import org.springframework.stereotype.Component;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
+
+import java.time.LocalDate;
 
 @Component
 public class DoctorMapper {
@@ -15,5 +18,18 @@ public class DoctorMapper {
         dto.setEmploymentDate(doctor.getEmploymentDate());
         dto.setSpecialization(doctor.getSpecialization());
         return dto;
+    }
+
+    public static Doctor toDoctor(DoctorRegistrationDto dto) {
+        Doctor doctor = new Doctor();
+        doctor.setFirstName(dto.getFirstName());
+        doctor.setLastName(dto.getLastName());
+        doctor.setEmail(dto.getEmail());
+        doctor.setUsername(dto.getUsername());
+        doctor.setLanguage(dto.getLanguage());
+        doctor.setExperience(dto.getExperience());
+        doctor.setEmploymentDate(LocalDate.now());
+        doctor.setSpecialization(dto.getSpecialization());
+        return doctor;
     }
 }

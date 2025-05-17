@@ -15,7 +15,9 @@ import pl.edu.hospital.dto.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.AppointmentForPatientDto;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.DoctorRegistrationDto;
 import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
@@ -147,6 +149,8 @@ public class AdminController {
                     "Invalid time range for consultation hours");
         } else {
             consultationService.updateConsultation(consultation);
+            appointmentService.cancelForUpdatedConsultation(consultation.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Consultation updated successfully");
         }
         return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
                 true, false);
@@ -161,6 +165,7 @@ public class AdminController {
                     "Invalid time range for consultation hours");
         } else {
             consultationService.createConsultation(consultation);
+            redirectAttributes.addFlashAttribute("successMessage", "Consultation created successfully");
         }
         return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
                 true, false);
@@ -170,10 +175,11 @@ public class AdminController {
     public RedirectView deleteConsultation(@RequestParam int id, @RequestParam String doctorUsername,
                                            RedirectAttributes redirectAttributes) {
         try {
-            appointmentService.cancelForConsultation(id);
+            appointmentService.cancelForDeletedConsultation(id);
             consultationService.deleteConsultation(id);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("successMessage", "Consultation deleted successfully");
         }
 
         return new RedirectView("/admin/doctors/" + doctorUsername + "/schedule", true, false);
@@ -251,5 +257,24 @@ public class AdminController {
         }
 
         return "admin_pages/admin_patient_appointment";
+    }
+
+    @GetMapping("/doctors/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("doctorDto", new DoctorRegistrationDto());
+        model.addAttribute("languages", Language.values());
+        model.addAttribute("specializations", Specialization.values());
+        return "admin_pages/admin_doctor_registration";
+    }
+
+    @PostMapping("/doctors/form")
+    public RedirectView registerDoctor(@ModelAttribute("doctorDto") DoctorRegistrationDto dto,
+                                       RedirectAttributes redirectAttributes) {
+        //validation
+        doctorService.createDoctor(dto);
+//        System.out.println(dto);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Doctor registered successfully");
+        return new RedirectView("/admin/doctors", true, false);
     }
 }

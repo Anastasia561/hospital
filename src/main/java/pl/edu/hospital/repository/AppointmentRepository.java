@@ -22,6 +22,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("select a from Appointment a where a.patient.username=:username and (a.date between :start and :end)")
     List<Appointment> findByPatientUsernameInRange(String username, LocalDate start, LocalDate end);
 
-    @Query(value = "select a from Appointment a WHERE a.time BETWEEN :start AND :end AND DAYOFWEEK(a.date) = :workingDay")
+    @Query(value = "select a from Appointment a WHERE a.time between :start and :end and DAYOFWEEK(a.date) = :workingDay")
     List<Appointment> getAllDayOfWeekAndInTimeRange(int workingDay, LocalTime start, LocalTime end);
+
+    @Query(value = "select a from Appointment a WHERE (a.time not between :start and :end) and DAYOFWEEK(a.date) = :workingDay")
+    List<Appointment> getAllDayOfWeekAndNotInTimeRange(int workingDay, LocalTime start, LocalTime end);
 }

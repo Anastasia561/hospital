@@ -128,8 +128,10 @@ public class DoctorController {
     }
 
     @PostMapping("/appointments/cancel")
-    public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId) {
+    public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
+                                          RedirectAttributes redirectAttributes) {
         appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
+        redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
         return new RedirectView("/doctor/appointments", true, false);
     }
 
@@ -166,6 +168,7 @@ public class DoctorController {
         try {
             recordService.saveRecord(dto);
             appointmentService.updateAppointmentStatus(Status.COMPLETED, appId);
+            redirectAttributes.addFlashAttribute("successMessage", "Medical record created successfully");
         } catch (AppointmentNotFoundException e) {
             redirectAttributes.addAttribute("errorMessage", e.getMessage());
         }

@@ -2,6 +2,7 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.exception.DoctorNotFoundException;
@@ -36,5 +37,10 @@ public class DoctorService {
                 .stream()
                 .map(DoctorMapper::toDoctorForAdminDto)
                 .toList();
+    }
+
+    public void createDoctor(DoctorRegistrationDto dto) {
+        Doctor doctor = DoctorMapper.toDoctor(dto);
+        doctorRepository.save(doctor);
     }
 }

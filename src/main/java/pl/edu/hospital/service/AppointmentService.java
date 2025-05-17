@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class AppointmentService {
@@ -124,10 +123,18 @@ public class AppointmentService {
                 .orElseThrow(() -> new AppointmentNotFoundException(id)).getDate();
     }
 
-    public void cancelForConsultation(int consultationId) {
+    public void cancelForDeletedConsultation(int consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new ConsultationNotFoundException(consultationId));
         List<Appointment> apps = appointmentRepository.getAllDayOfWeekAndInTimeRange(consultation.getWorkingDay().getMysqlDay(),
+                consultation.getStartTime(), consultation.getEndTime());
+        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId()));
+    }
+
+    public void cancelForUpdatedConsultation(int consultationId) {
+        Consultation consultation = consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new ConsultationNotFoundException(consultationId));
+        List<Appointment> apps = appointmentRepository.getAllDayOfWeekAndNotInTimeRange(consultation.getWorkingDay().getMysqlDay(),
                 consultation.getStartTime(), consultation.getEndTime());
         apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId()));
     }

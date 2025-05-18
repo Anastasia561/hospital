@@ -105,7 +105,7 @@ public class DoctorController {
         if (startDate.isAfter(endDate)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "No data found");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }

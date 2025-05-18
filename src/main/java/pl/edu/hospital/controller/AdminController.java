@@ -118,28 +118,6 @@ public class AdminController {
         return "admin_pages/admin_doctors";
     }
 
-    @GetMapping("/doctors/{username}/schedule")
-    public String getDoctorSchedule(@PathVariable String username, Model model) {
-        try {
-            String dFullName = doctorService.getDoctorFullNameByUsername(username);
-            Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
-                    .getAllByDoctorUsername(username).stream()
-                    .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
-
-            model.addAttribute("days", WorkingDay.values());
-            List<WorkingDay> freeDays = Arrays.stream(WorkingDay.values()).filter(d -> !scheduleByDay.containsKey(d)).toList();
-            model.addAttribute("freeDays", freeDays);
-            model.addAttribute("username", username);
-            model.addAttribute("dFullName", dFullName);
-            model.addAttribute("scheduleByDay", scheduleByDay);
-
-        } catch (DoctorNotFoundException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-
-        return "admin_pages/admin_doctor_schedule";
-    }
-
     @PostMapping("/consultations/edit")
     public RedirectView saveEditedConsultation(@ModelAttribute ConsultationDto consultation,
                                                RedirectAttributes redirectAttributes) {
@@ -276,5 +254,27 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Doctor registered successfully");
         return new RedirectView("/admin/doctors", true, false);
+    }
+
+    @GetMapping("/doctors/{username}/schedule")
+    public String getDoctorSchedule(@PathVariable String username, Model model) {
+        try {
+            String dFullName = doctorService.getDoctorFullNameByUsername(username);
+            Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
+                    .getAllByDoctorUsername(username).stream()
+                    .collect(Collectors.groupingBy(ConsultationDto::getDay, TreeMap::new, Collectors.toList()));
+
+            model.addAttribute("days", WorkingDay.values());
+            List<WorkingDay> freeDays = Arrays.stream(WorkingDay.values()).filter(d -> !scheduleByDay.containsKey(d)).toList();
+            model.addAttribute("freeDays", freeDays);
+            model.addAttribute("username", username);
+            model.addAttribute("dFullName", dFullName);
+            model.addAttribute("scheduleByDay", scheduleByDay);
+
+        } catch (DoctorNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "admin_pages/admin_doctor_schedule";
     }
 }

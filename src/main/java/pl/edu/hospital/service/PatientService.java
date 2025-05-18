@@ -2,13 +2,18 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.dto.PatientForProfileDto;
 import pl.edu.hospital.dto.PatientForRecordDto;
+import pl.edu.hospital.entity.Address;
+import pl.edu.hospital.entity.City;
+import pl.edu.hospital.entity.Country;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.PatientMapper;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -42,5 +47,30 @@ public class PatientService {
         Patient patient = patientRepository.findPatientByAppointmentId(appId)
                 .orElseThrow(() -> new PatientNotFoundException(appId + ""));
         return PatientMapper.toPatientForRecordDto(patient);
+    }
+
+    public PatientForProfileDto getPatientByUsername(String username) {
+        Patient patient = patientRepository.findByUsername(username)
+                .orElseThrow(() -> new PatientNotFoundException(username));
+        return PatientMapper.toPatientForProfileDto(patient);
+    }
+
+    public void updatePatient(PatientForProfileDto dto) {
+        Patient patient = patientRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new PatientNotFoundException(dto.getUsername()));
+
+        patient.setFirstName(dto.getFirstName());
+        patient.setLastName(dto.getLastName());
+        patient.setEmail(dto.getEmail());
+        patient.setLanguage(dto.getLanguage());
+        patient.setBirthDate(dto.getBirthDate());
+        patient.setPhoneNumber(dto.getPhoneNumber());
+
+        patient.getAddress().setNumber(dto.getNumber());
+        patient.getAddress().setStreet(dto.getStreet());
+        patient.getAddress().getCity().getCountry().setName(dto.getCountry());
+        patient.getAddress().getCity().setName(dto.getCity());
+
+        patientRepository.save(patient);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.hospital.dto.AppointmentForPatientDto;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.PatientForProfileDto;
 import pl.edu.hospital.dto.RecordForPatientDto;
+import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
@@ -94,7 +97,7 @@ public class PatientController {
         if (startDate.isAfter(endDate)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "No data found");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
@@ -204,5 +207,33 @@ public class PatientController {
         }
 
         return "patient_pages/patient_doctor_schedule";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model) {
+        //using authentication
+        String username = "jdoe";
+        PatientForProfileDto dto = patientService.getPatientByUsername(username);
+        model.addAttribute("patient", dto);
+        model.addAttribute("editMode", false);
+        return "patient_pages/patient_profile";
+    }
+
+
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model) {
+        //using authentication
+        String username = "jdoe";
+        PatientForProfileDto dto = patientService.getPatientByUsername(username);
+        model.addAttribute("patient", dto);
+        model.addAttribute("languages", Language.values());
+        model.addAttribute("editMode", true);
+        return "patient_pages/patient_profile";
+    }
+
+    @PostMapping("/profile/update")
+    public RedirectView updateProfile(@ModelAttribute PatientForProfileDto dto) {
+        patientService.updatePatient(dto);
+        return new RedirectView("/patient/profile", true, false);
     }
 }

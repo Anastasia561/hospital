@@ -1,4 +1,6 @@
-package pl.edu.hospital.dto;
+package pl.edu.hospital.dto.record;
+
+import pl.edu.hospital.dto.PrescriptionDto;
 
 import java.util.List;
 

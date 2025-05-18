@@ -1,9 +1,9 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.hospital.dto.RecordCreationRequestDto;
-import pl.edu.hospital.dto.RecordForDoctorDto;
-import pl.edu.hospital.dto.RecordForPatientDto;
+import pl.edu.hospital.dto.record.RecordCreationRequestDto;
+import pl.edu.hospital.dto.record.RecordForDoctorDto;
+import pl.edu.hospital.dto.record.RecordForPatientDto;
 import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;

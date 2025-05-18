@@ -1,4 +1,4 @@
-package pl.edu.hospital.dto;
+package pl.edu.hospital.dto.doctor;
 
 import pl.edu.hospital.entity.enums.Specialization;
 

@@ -1,4 +1,4 @@
-package pl.edu.hospital.dto;
+package pl.edu.hospital.dto.patient;
 
 import pl.edu.hospital.entity.Address;
 

@@ -1,19 +1,15 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.hospital.dto.PatientForAdminDto;
-import pl.edu.hospital.dto.PatientForProfileDto;
-import pl.edu.hospital.dto.PatientForRecordDto;
-import pl.edu.hospital.entity.Address;
-import pl.edu.hospital.entity.City;
-import pl.edu.hospital.entity.Country;
+import pl.edu.hospital.dto.patient.PatientForAdminDto;
+import pl.edu.hospital.dto.patient.PatientForProfileDto;
+import pl.edu.hospital.dto.patient.PatientForRecordDto;
 import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.mapper.PatientMapper;
 import pl.edu.hospital.repository.PatientRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatientService {

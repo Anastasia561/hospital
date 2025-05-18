@@ -1,7 +1,8 @@
-package pl.edu.hospital.dto;
+package pl.edu.hospital.dto.patient;
 
-public class PatientForScheduleDto {
+public class PatientForRecordDto {
     private String fullName;
+    private String phoneNumber;
     private String email;
 
     public String getFullName() {
@@ -10,6 +11,14 @@ public class PatientForScheduleDto {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {

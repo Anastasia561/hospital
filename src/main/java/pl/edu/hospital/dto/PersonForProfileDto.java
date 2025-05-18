@@ -1,18 +1,13 @@
 package pl.edu.hospital.dto;
 
 import pl.edu.hospital.entity.enums.Language;
-import pl.edu.hospital.entity.enums.Specialization;
 
-import java.time.LocalDate;
-
-public class DoctorForProfileDto {
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private Language language;
-    private LocalDate employmentDate;
-    private Specialization specialization;
+public abstract class PersonForProfileDto {
+    protected String username;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+    protected Language language;
 
     public String getUsername() {
         return username;
@@ -52,21 +47,5 @@ public class DoctorForProfileDto {
 
     public void setLanguage(Language language) {
         this.language = language;
-    }
-
-    public LocalDate getEmploymentDate() {
-        return employmentDate;
-    }
-
-    public void setEmploymentDate(LocalDate employmentDate) {
-        this.employmentDate = employmentDate;
-    }
-
-    public Specialization getSpecialization() {
-        return specialization;
-    }
-
-    public void setSpecialization(Specialization specialization) {
-        this.specialization = specialization;
     }
 }

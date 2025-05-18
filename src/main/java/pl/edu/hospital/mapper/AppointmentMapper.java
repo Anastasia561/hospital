@@ -1,7 +1,7 @@
 package pl.edu.hospital.mapper;
 
-import pl.edu.hospital.dto.AppointmentForDoctorDto;
-import pl.edu.hospital.dto.AppointmentForPatientDto;
+import pl.edu.hospital.dto.appointment.AppointmentForDoctorDto;
+import pl.edu.hospital.dto.appointment.AppointmentForPatientDto;
 import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.Patient;

@@ -11,18 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
-import pl.edu.hospital.dto.AppointmentForDoctorDto;
-import pl.edu.hospital.dto.AppointmentForPatientDto;
+import pl.edu.hospital.dto.AdminForProfileDto;
+import pl.edu.hospital.dto.appointment.AppointmentForDoctorDto;
+import pl.edu.hospital.dto.appointment.AppointmentForPatientDto;
 import pl.edu.hospital.dto.ConsultationDto;
-import pl.edu.hospital.dto.DoctorForAdminDto;
-import pl.edu.hospital.dto.DoctorRegistrationDto;
-import pl.edu.hospital.dto.PatientForAdminDto;
+import pl.edu.hospital.dto.doctor.DoctorForAdminDto;
+import pl.edu.hospital.dto.doctor.DoctorRegistrationDto;
+import pl.edu.hospital.dto.patient.PatientForAdminDto;
 import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
 import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.exception.PatientNotFoundException;
+import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
@@ -43,13 +45,15 @@ public class AdminController {
     private final PatientService patientService;
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
+    private final AdminService adminService;
 
     public AdminController(AppointmentService appointmentService, PatientService patientService,
-                           DoctorService doctorService, ConsultationService consultationService) {
+                           DoctorService doctorService, ConsultationService consultationService, AdminService adminService) {
         this.appointmentService = appointmentService;
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.consultationService = consultationService;
+        this.adminService = adminService;
     }
 
     @GetMapping("/home")
@@ -276,5 +280,33 @@ public class AdminController {
         }
 
         return "admin_pages/admin_doctor_schedule";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model) {
+        //using authentication
+        String username = "pscott";
+        AdminForProfileDto dto = adminService.findByUsernameForProfileDto(username);
+        model.addAttribute("admin", dto);
+        model.addAttribute("editMode", false);
+        return "admin_pages/admin_profile";
+    }
+
+
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model) {
+        //using authentication
+        String username = "pscott";
+        AdminForProfileDto dto = adminService.findByUsernameForProfileDto(username);
+        model.addAttribute("admin", dto);
+        model.addAttribute("languages", Language.values());
+        model.addAttribute("editMode", true);
+        return "admin_pages/admin_profile";
+    }
+
+    @PostMapping("/profile/update")
+    public RedirectView updateProfile(@ModelAttribute AdminForProfileDto dto) {
+        adminService.updateAdmin(dto);
+        return new RedirectView("/admin/profile", true, false);
     }
 }

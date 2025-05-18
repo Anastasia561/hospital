@@ -1,61 +1,17 @@
-package pl.edu.hospital.dto;
+package pl.edu.hospital.dto.patient;
 
+import pl.edu.hospital.dto.PersonForProfileDto;
 import pl.edu.hospital.entity.enums.Language;
 
 import java.time.LocalDate;
 
-public class PatientForProfileDto {
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private Language language;
+public class PatientForProfileDto extends PersonForProfileDto {
     private LocalDate birthDate;
     private String phoneNumber;
     private String country;
     private String city;
     private String street;
     private int number;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
 
     public LocalDate getBirthDate() {
         return birthDate;

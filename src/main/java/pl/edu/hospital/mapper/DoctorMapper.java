@@ -1,9 +1,9 @@
 package pl.edu.hospital.mapper;
 
 import org.springframework.stereotype.Component;
-import pl.edu.hospital.dto.DoctorForAdminDto;
-import pl.edu.hospital.dto.DoctorForProfileDto;
-import pl.edu.hospital.dto.DoctorRegistrationDto;
+import pl.edu.hospital.dto.doctor.DoctorForAdminDto;
+import pl.edu.hospital.dto.doctor.DoctorForProfileDto;
+import pl.edu.hospital.dto.doctor.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
 
 import java.time.LocalDate;

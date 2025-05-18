@@ -13,10 +13,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.hospital.dto.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.ConsultationDto;
+import pl.edu.hospital.dto.DoctorForProfileDto;
+import pl.edu.hospital.dto.PatientForProfileDto;
 import pl.edu.hospital.dto.PatientForRecordDto;
 import pl.edu.hospital.dto.RecordCreationRequestDto;
 import pl.edu.hospital.dto.RecordForDoctorDto;
 import pl.edu.hospital.entity.enums.Frequency;
+import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
 import pl.edu.hospital.exception.AppointmentNotFoundException;
@@ -173,5 +176,33 @@ public class DoctorController {
             redirectAttributes.addAttribute("errorMessage", e.getMessage());
         }
         return new RedirectView("/doctor/appointments/record/" + appId, true, false);
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model) {
+        //using authentication
+        String username = "rgarcia";
+        DoctorForProfileDto dto = doctorService.findByUsernameForProfileDto(username);
+        model.addAttribute("doctor", dto);
+        model.addAttribute("editMode", false);
+        return "doctor_pages/doctor_profile";
+    }
+
+
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model) {
+        //using authentication
+        String username = "rgarcia";
+        DoctorForProfileDto dto = doctorService.findByUsernameForProfileDto(username);
+        model.addAttribute("doctor", dto);
+        model.addAttribute("languages", Language.values());
+        model.addAttribute("editMode", true);
+        return "doctor_pages/doctor_profile";
+    }
+
+    @PostMapping("/profile/update")
+    public RedirectView updateProfile(@ModelAttribute DoctorForProfileDto dto) {
+        doctorService.updateDoctor(dto);
+        return new RedirectView("/doctor/profile", true, false);
     }
 }

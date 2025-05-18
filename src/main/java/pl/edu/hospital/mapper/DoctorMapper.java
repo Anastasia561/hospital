@@ -2,6 +2,7 @@ package pl.edu.hospital.mapper;
 
 import org.springframework.stereotype.Component;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.DoctorForProfileDto;
 import pl.edu.hospital.dto.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
 
@@ -31,5 +32,17 @@ public class DoctorMapper {
         doctor.setEmploymentDate(LocalDate.now());
         doctor.setSpecialization(dto.getSpecialization());
         return doctor;
+    }
+
+    public static DoctorForProfileDto toDoctorForProfileDto(Doctor doctor) {
+        DoctorForProfileDto dto = new DoctorForProfileDto();
+        dto.setUsername(doctor.getUsername());
+        dto.setEmail(doctor.getEmail());
+        dto.setLanguage(doctor.getLanguage());
+        dto.setSpecialization(doctor.getSpecialization());
+        dto.setFirstName(doctor.getFirstName());
+        dto.setLastName(doctor.getLastName());
+        dto.setEmploymentDate(doctor.getEmploymentDate());
+        return dto;
     }
 }

@@ -67,23 +67,38 @@
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Birth Date</label>
-                                    <input type="date" name="birthDate" class="form-control"
-                                           th:value="${patient.birthDate}"
-                                           th:readonly="${!editMode}">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white">
+                                            <i class="fas fa-calendar-alt text-primary"></i>
+                                        </span>
+                                        <input type="date" name="birthDate" class="form-control"
+                                               th:value="${patient.birthDate}"
+                                               th:readonly="${!editMode}">
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Language</label>
-                                    <input type="text" class="form-control" th:value="${patient.language}"
-                                           th:if="${!editMode}" readonly>
 
-                                    <select class="form-select" name="language" th:if="${editMode}">
-                                        <option th:each="lang : ${languages}"
-                                                th:value="${lang}"
-                                                th:text="${lang}"
-                                                th:selected="${lang == patient.language}">
-                                        </option>
-                                    </select>
+                                    <div class="input-group" th:if="${!editMode}">
+                                        <span class="input-group-text bg-white">
+                                            <i class="fas fa-language text-info"></i>
+                                        </span>
+                                        <input type="text" class="form-control" th:value="${patient.language}" readonly>
+                                    </div>
+
+                                    <div class="input-group" th:if="${editMode}">
+                                        <span class="input-group-text bg-white">
+                                            <i class="fas fa-language text-info"></i>
+                                        </span>
+                                        <select class="form-select" name="language">
+                                            <option th:each="lang : ${languages}"
+                                                    th:value="${lang}"
+                                                    th:text="${lang}"
+                                                    th:selected="${lang == patient.language}">
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 

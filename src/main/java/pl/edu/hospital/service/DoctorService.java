@@ -2,6 +2,7 @@ package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.DoctorForAdminDto;
+import pl.edu.hospital.dto.DoctorForProfileDto;
 import pl.edu.hospital.dto.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.entity.enums.Specialization;
@@ -44,9 +45,27 @@ public class DoctorService {
         doctorRepository.save(doctor);
     }
 
-    public DoctorForAdminDto findByUsername(String username) {
+    public DoctorForAdminDto findByUsernameForAdminDto(String username) {
         Doctor doctor = doctorRepository.findByUsername(username)
                 .orElseThrow(() -> new DoctorNotFoundException(username));
         return DoctorMapper.toDoctorForAdminDto(doctor);
+    }
+
+    public DoctorForProfileDto findByUsernameForProfileDto(String username) {
+        Doctor doctor = doctorRepository.findByUsername(username)
+                .orElseThrow(() -> new DoctorNotFoundException(username));
+        return DoctorMapper.toDoctorForProfileDto(doctor);
+    }
+
+    public void updateDoctor(DoctorForProfileDto dto) {
+        Doctor doctor = doctorRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new DoctorNotFoundException(dto.getUsername()));
+
+        doctor.setFirstName(dto.getFirstName());
+        doctor.setLanguage(dto.getLanguage());
+        doctor.setLastName(dto.getLastName());
+        doctor.setEmail(dto.getEmail());
+
+        doctorRepository.save(doctor);
     }
 }

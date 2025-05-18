@@ -135,7 +135,7 @@ public class PatientController {
                     "Can not schedule appointment for past dates");
             return new RedirectView("/patient/doctors", true, false);
         } else {
-            DoctorForAdminDto dto = doctorService.findByUsername(username);
+            DoctorForAdminDto dto = doctorService.findByUsernameForAdminDto(username);
             List<LocalTime> timeSlots;
             try {
                 timeSlots = appointmentService.getAvailableTimeSlotsForDoctorByUsername(username, date);

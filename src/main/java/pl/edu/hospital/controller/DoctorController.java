@@ -28,6 +28,7 @@ import pl.edu.hospital.exception.RecordNotFoundException;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
+import pl.edu.hospital.service.EmailService;
 import pl.edu.hospital.service.PatientService;
 import pl.edu.hospital.service.RecordService;
 
@@ -47,14 +48,17 @@ public class DoctorController {
     private final AppointmentService appointmentService;
     private final RecordService recordService;
     private final PatientService patientService;
+    private final EmailService emailService;
 
     public DoctorController(DoctorService doctorService, ConsultationService consultationService,
-                            AppointmentService appointmentService, RecordService recordService, PatientService patientService) {
+                            AppointmentService appointmentService, RecordService recordService,
+                            PatientService patientService, EmailService emailService) {
         this.doctorService = doctorService;
         this.consultationService = consultationService;
         this.appointmentService = appointmentService;
         this.recordService = recordService;
         this.patientService = patientService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/home")
@@ -132,8 +136,15 @@ public class DoctorController {
     @PostMapping("/appointments/cancel")
     public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
                                           RedirectAttributes redirectAttributes) {
-        appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
-        redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+        try {
+            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
+            emailService.sendCancellationEmailForDoctorByDoctor(appointmentId);
+            emailService.sendCancellationEmailForPatientByDoctor(appointmentId);
+            redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
         return new RedirectView("/doctor/appointments", true, false);
     }
 

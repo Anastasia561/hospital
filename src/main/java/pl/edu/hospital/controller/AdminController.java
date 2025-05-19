@@ -28,7 +28,9 @@ import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
+import pl.edu.hospital.service.EmailService;
 import pl.edu.hospital.service.PatientService;
+import pl.edu.hospital.utils.TranslationUtil;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -46,14 +48,17 @@ public class AdminController {
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
     private final AdminService adminService;
+    private final EmailService emailService;
 
     public AdminController(AppointmentService appointmentService, PatientService patientService,
-                           DoctorService doctorService, ConsultationService consultationService, AdminService adminService) {
+                           DoctorService doctorService, ConsultationService consultationService,
+                           AdminService adminService, EmailService emailService) {
         this.appointmentService = appointmentService;
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.consultationService = consultationService;
         this.adminService = adminService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/home")

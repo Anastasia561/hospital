@@ -26,6 +26,7 @@ import pl.edu.hospital.exception.RecordNotFoundException;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
+import pl.edu.hospital.service.EmailService;
 import pl.edu.hospital.service.PatientService;
 import pl.edu.hospital.service.RecordService;
 
@@ -46,16 +47,19 @@ public class PatientController {
     private final RecordService recordService;
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
+    private final EmailService emailService;
 
     public PatientController(PatientService patientService, AppointmentService appointmentService,
                              RecordService recordService, DoctorService doctorService,
-                             ConsultationService consultationService) {
+                             ConsultationService consultationService, EmailService emailService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.recordService = recordService;
         this.doctorService = doctorService;
         this.consultationService = consultationService;
+        this.emailService = emailService;
     }
+
 
     @GetMapping("/home")
     public String home() {
@@ -108,8 +112,15 @@ public class PatientController {
     @PostMapping("/appointments/cancel")
     public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
                                           RedirectAttributes redirectAttributes) {
-        appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
-        redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+        try {
+            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
+            emailService.sendCancellationEmailToPatientByPatient(appointmentId);
+            emailService.sendCancellationEmailForDoctorByPatient(appointmentId);
+            redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
         return new RedirectView("/patient/appointments", true, false);
     }
 
@@ -162,11 +173,11 @@ public class PatientController {
 
         try {
             appointmentService.createAppointment(patientUsername, doctorUsername, date, time);
+            emailService.sendConfirmationEmail(patientUsername, doctorUsername, date, time);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment booked successfully.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-
 
         return new RedirectView("/patient/doctors", true, false);
     }

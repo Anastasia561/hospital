@@ -84,14 +84,15 @@ public class AdminController {
         List<DoctorForAdminDto> doctors = doctorService.getAllForAdmin();
         redirectAttributes.addFlashAttribute("doctors", doctors);
 
+        redirectAttributes.addFlashAttribute("startDate", startDate);
+        redirectAttributes.addFlashAttribute("endDate", endDate);
+
         if (startDate.isAfter(endDate)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
         } else {
             String dUsername = data.split(" ")[0];
             String dFullName = data.split(" ", 2)[1];
             redirectAttributes.addFlashAttribute("doctorFullName", dFullName);
-            redirectAttributes.addFlashAttribute("startDate", startDate);
-            redirectAttributes.addFlashAttribute("endDate", endDate);
 
             Map<Status, Integer> statistics = appointmentService.getStatisticsForDoctorAndPeriod(dUsername, startDate, endDate);
             redirectAttributes.addFlashAttribute("statistics", statistics);
@@ -184,6 +185,10 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
         redirectAttributes.addFlashAttribute("username", username);
+        redirectAttributes.addFlashAttribute("endDate", endDate);
+        redirectAttributes.addFlashAttribute("startDate", startDate);
+        redirectAttributes.addFlashAttribute("selectedStatus", status);
+
         if (startDate.isAfter(endDate)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
         } else if (appointments.isEmpty()) {

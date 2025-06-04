@@ -20,7 +20,7 @@
                 <option th:each="s : ${specializations}"
                         th:value="${s}"
                         th:text="${s}"
-                        th:selected="${s == selectedSpecialization}">
+                        th:selected="${s.name() == selectedSpecialization}">
                 </option>
             </select>
             <button type="submit" class="btn btn-primary btn-sm">Filter</button>

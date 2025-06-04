@@ -98,6 +98,10 @@ public class PatientController {
 
         redirectAttributes.addFlashAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
         redirectAttributes.addFlashAttribute("username", username);
+        redirectAttributes.addFlashAttribute("endDate", endDate);
+        redirectAttributes.addFlashAttribute("startDate", startDate);
+        redirectAttributes.addFlashAttribute("selectedStatus", status);
+        redirectAttributes.addFlashAttribute("selectedSpecialization", specialization);
         if (startDate.isAfter(endDate)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
         } else if (appointments.isEmpty()) {
@@ -141,6 +145,7 @@ public class PatientController {
                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                   RedirectAttributes redirectAttributes, Model model) {
 
+        redirectAttributes.addFlashAttribute("selectedDate", date);
         if (date.isBefore(LocalDate.now())) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Can not schedule appointment for past dates");

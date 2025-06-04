@@ -7,10 +7,19 @@ public class DoctorRegistrationDto {
     private String username;
     private String firstName;
     private String lastName;
+    private String password;
     private String email;
     private Language language;
     private int experience;
     private Specialization specialization;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;

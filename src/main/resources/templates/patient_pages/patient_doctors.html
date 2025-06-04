@@ -20,7 +20,7 @@
                 <option th:each="s : ${specializations}"
                         th:value="${s}"
                         th:text="${s}"
-                        th:selected="${s == selectedSpecialization}">
+                        th:selected="${s.name() == selectedSpecialization}">
                 </option>
             </select>
             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
@@ -49,7 +49,8 @@
                                class="btn btn-outline-success btn-sm text-center">Schedule</a>
                             <form th:action="@{/patient/doctors/book/{username}(username=${d.username})}"
                                   method="get" class="d-flex gap-2">
-                                <input type="date" name="date" class="form-control form-control-sm" required/>
+                                <input type="date" name="date" class="form-control form-control-sm"
+                                       th:value="${selectedDate}" required/>
                                 <button type="submit" class="btn btn-outline-primary btn-sm">Book</button>
                             </form>
                         </div>

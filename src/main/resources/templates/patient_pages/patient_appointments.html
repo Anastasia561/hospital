@@ -22,11 +22,13 @@
     <form th:action="@{/patient/apps}" method="post" class="row g-3 mb-4 mt-3">
         <div class="col-md-3">
             <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" id="startDate" name="startDate" class="form-control" required>
+            <input type="date" id="startDate" name="startDate" class="form-control"
+                   th:value="${startDate}" required>
         </div>
         <div class="col-md-3">
             <label for="endDate" class="form-label">End Date</label>
-            <input type="date" id="endDate" name="endDate" class="form-control" required>
+            <input type="date" id="endDate" name="endDate" class="form-control"
+                   th:value="${endDate}" required>
         </div>
 
         <div class="w-100"></div>
@@ -35,7 +37,8 @@
             <label for="status" class="form-label">Filter By Status:</label>
             <select id="status" name="status" class="form-control">
                 <option value="">All</option>
-                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                        th:selected="${s == selectedStatus}"></option>
             </select>
         </div>
 
@@ -43,7 +46,8 @@
             <label for="specialization" class="form-label">Filter By Specialization:</label>
             <select id="specialization" name="specialization" class="form-control">
                 <option value="">All</option>
-                <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"></option>
+                <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"
+                        th:selected="${spec == selectedSpecialization}"></option>
             </select>
         </div>
 

@@ -18,18 +18,21 @@
             <select id="doctor" name="data" class="form-select" required>
                 <option value="">-- Select Doctor --</option>
                 <option th:each="d : ${doctors}"
-                        th:value="${d.username+' '+d.fullName}"
-                        th:text="${d.fullName}">
+                        th:value="${d.username + ' ' + d.fullName}"
+                        th:text="${d.fullName}"
+                        th:selected="${doctorFullName != null} ? ${d.fullName == doctorFullName} : false">
                 </option>
             </select>
         </div>
         <div class="col-md-3">
             <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" id="startDate" name="startDate" class="form-control" required>
+            <input type="date" id="startDate" name="startDate" class="form-control"
+                   th:value="${startDate}" required>
         </div>
         <div class="col-md-3">
             <label for="endDate" class="form-label">End Date</label>
-            <input type="date" id="endDate" name="endDate" class="form-control" required>
+            <input type="date" id="endDate" name="endDate" class="form-control"
+                   th:value="${endDate}">
         </div>
         <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100">View</button>

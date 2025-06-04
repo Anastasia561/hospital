@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title layout:fragment="title">Patient register</title>
+</head>
+<body>
+<div layout:fragment="navbar"
+     th:replace="~{fragments/nav :: nav-general}"></div>
+
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow p-4">
+                    <h3 class="text-center mb-4">Patient Registration – MediCore</h3>
+                    <form th:action="@{/register}" th:object="${patient}" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input th:field="*{firstName}" id="firstName" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input th:field="*{lastName}" id="lastName" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" th:field="*{email}" id="email" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input th:field="*{username}" id="username" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" class="form-control"
+                                       required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="password2" class="form-label">Repeat password</label>
+                                <input type="password" id="password2" class="form-control"
+                                       required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="language" class="form-label">Preferred Language</label>
+                                <select th:field="*{language}" id="language" class="form-select" required>
+                                    <option value="" disabled selected>Select language</option>
+                                    <option th:each="lang : ${languages}"
+                                            th:value="${lang}"
+                                            th:text="${lang}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="birthDate" class="form-label">Birth Date</label>
+                                <input type="date" th:field="*{birthDate}" id="birthDate" class="form-control"
+                                       required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input th:field="*{phoneNumber}" id="phoneNumber" class="form-control" required/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="country" class="form-label">Country</label>
+                                <input th:field="*{country}" id="country" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">City</label>
+                                <input th:field="*{city}" id="city" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="street" class="form-label">Street</label>
+                                <input th:field="*{street}" id="street" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="number" class="form-label">Street Number</label>
+                                <input th:field="*{number}" id="number" class="form-control" required/>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-outline-primary px-4">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

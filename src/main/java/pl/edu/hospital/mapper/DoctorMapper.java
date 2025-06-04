@@ -5,6 +5,7 @@ import pl.edu.hospital.dto.doctor.DoctorForAdminDto;
 import pl.edu.hospital.dto.doctor.DoctorForProfileDto;
 import pl.edu.hospital.dto.doctor.DoctorRegistrationDto;
 import pl.edu.hospital.entity.Doctor;
+import pl.edu.hospital.entity.enums.Role;
 
 import java.time.LocalDate;
 
@@ -31,6 +32,8 @@ public class DoctorMapper {
         doctor.setExperience(dto.getExperience());
         doctor.setEmploymentDate(LocalDate.now());
         doctor.setSpecialization(dto.getSpecialization());
+        doctor.setPassword("test");
+        doctor.setRole(Role.DOCTOR);
         return doctor;
     }
 

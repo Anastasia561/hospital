@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.entity.enums.Role;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -18,6 +19,7 @@ public abstract class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
+    private String password;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -25,6 +27,24 @@ public abstract class Person {
     private String email;
     @Enumerated(EnumType.STRING)
     private Language language;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public Integer getId() {
         return id;

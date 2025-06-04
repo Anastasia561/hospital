@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.AdminForProfileDto;
 import pl.edu.hospital.entity.Admin;
 import pl.edu.hospital.exception.AdminNotFoundException;
@@ -14,7 +15,7 @@ public class AdminService {
 
     public AdminService(AdminRepository adminRepository, AdminMapper adminMapper) {
         this.adminRepository = adminRepository;
-        this.adminMapper=adminMapper;
+        this.adminMapper = adminMapper;
     }
 
     public AdminForProfileDto findByUsernameForProfileDto(String username) {
@@ -23,6 +24,7 @@ public class AdminService {
         return adminMapper.adminForProfileDto(admin);
     }
 
+    @Transactional
     public void updateAdmin(AdminForProfileDto dto) {
         Admin admin = adminRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new AdminNotFoundException(dto.getUsername()));

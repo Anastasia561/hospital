@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,6 +35,7 @@ public class EmailService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    @Async
     public void sendConfirmationEmail(String patientUsername, String doctorUsername,
                                       LocalDate date, LocalTime time) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -59,6 +61,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @Async
     public void sendCancellationEmailToPatientByPatient(int appId) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -84,6 +87,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @Async
     public void sendCancellationEmailForDoctorByPatient(int appId) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -108,6 +112,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @Async
     public void sendCancellationEmailForDoctorByDoctor(int appId) {
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -130,6 +135,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @Async
     public void sendCancellationEmailForPatientByDoctor(int appId) {
         SimpleMailMessage message = new SimpleMailMessage();
 

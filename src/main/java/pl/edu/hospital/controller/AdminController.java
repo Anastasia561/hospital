@@ -1,8 +1,10 @@
 package pl.edu.hospital.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,17 +50,15 @@ public class AdminController {
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
     private final AdminService adminService;
-    private final EmailService emailService;
 
     public AdminController(AppointmentService appointmentService, PatientService patientService,
                            DoctorService doctorService, ConsultationService consultationService,
-                           AdminService adminService, EmailService emailService) {
+                           AdminService adminService) {
         this.appointmentService = appointmentService;
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.consultationService = consultationService;
         this.adminService = adminService;
-        this.emailService = emailService;
     }
 
     @GetMapping("/home")
@@ -260,12 +260,17 @@ public class AdminController {
     }
 
     @PostMapping("/doctors/form")
-    public RedirectView registerDoctor(@ModelAttribute("doctorDto") DoctorRegistrationDto dto,
-                                       RedirectAttributes redirectAttributes) {
-        //validation
+    public Object registerDoctor(@Valid @ModelAttribute("doctorDto") DoctorRegistrationDto dto,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("selectedLanguage", dto.getLanguage());
+            model.addAttribute("selectedSpecialization", dto.getSpecialization());
+            model.addAttribute("specializations", Specialization.values());
+            model.addAttribute("languages", Language.values());
+            return "admin_pages/admin_doctor_registration";
+        }
         doctorService.createDoctor(dto);
-//        System.out.println(dto);
-
         redirectAttributes.addFlashAttribute("successMessage", "Doctor registered successfully");
         return new RedirectView("/admin/doctors", true, false);
     }

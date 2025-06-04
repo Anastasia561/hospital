@@ -1,15 +1,31 @@
 package pl.edu.hospital.dto.doctor;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.entity.enums.Specialization;
+import pl.edu.hospital.validation.annotation.UniqueUsername;
+import pl.edu.hospital.validation.annotation.ValidPassword;
 
 public class DoctorRegistrationDto {
+    @NotEmpty
+    @Size(min = 2, max = 50)
+    @UniqueUsername
     private String username;
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String firstName;
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String lastName;
+    @ValidPassword
     private String password;
+    @Email(message = "Email must be a valid email address")
     private String email;
     private Language language;
+    @Positive
     private int experience;
     private Specialization specialization;
 
@@ -75,18 +91,5 @@ public class DoctorRegistrationDto {
 
     public void setSpecialization(Specialization specialization) {
         this.specialization = specialization;
-    }
-
-    @Override
-    public String toString() {
-        return "DoctorRegistrationDto{" +
-                "username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", language=" + language +
-                ", experience=" + experience +
-                ", specialization=" + specialization +
-                '}';
     }
 }

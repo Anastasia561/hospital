@@ -47,19 +47,17 @@ public class PatientController {
     private final RecordService recordService;
     private final DoctorService doctorService;
     private final ConsultationService consultationService;
-    private final EmailService emailService;
+//    private final EmailService emailService;
 
     public PatientController(PatientService patientService, AppointmentService appointmentService,
                              RecordService recordService, DoctorService doctorService,
-                             ConsultationService consultationService, EmailService emailService) {
+                             ConsultationService consultationService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.recordService = recordService;
         this.doctorService = doctorService;
         this.consultationService = consultationService;
-        this.emailService = emailService;
     }
-
 
     @GetMapping("/home")
     public String home() {
@@ -77,7 +75,6 @@ public class PatientController {
         } catch (DoctorNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "patient_pages/patient_appointments";
     }
 
@@ -109,7 +106,6 @@ public class PatientController {
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
-
         return new RedirectView("appointments", true, false);
     }
 
@@ -117,14 +113,13 @@ public class PatientController {
     public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
                                           RedirectAttributes redirectAttributes) {
         try {
-            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
-            emailService.sendCancellationEmailToPatientByPatient(appointmentId);
-            emailService.sendCancellationEmailForDoctorByPatient(appointmentId);
+            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId, false);
+//            emailService.sendCancellationEmailToPatientByPatient(appointmentId);
+//            emailService.sendCancellationEmailForDoctorByPatient(appointmentId);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-
         return new RedirectView("/patient/appointments", true, false);
     }
 
@@ -136,7 +131,6 @@ public class PatientController {
         } catch (PatientNotFoundException | RecordNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "patient_pages/patient_record";
     }
 
@@ -165,7 +159,6 @@ public class PatientController {
             model.addAttribute("availableSlots", timeSlots);
             return "patient_pages/patient_appointment_booking";
         }
-
     }
 
     @PostMapping("/appointments/book")
@@ -178,12 +171,11 @@ public class PatientController {
 
         try {
             appointmentService.createAppointment(patientUsername, doctorUsername, date, time);
-            emailService.sendConfirmationEmail(patientUsername, doctorUsername, date, time);
+//            emailService.sendConfirmationEmail(patientUsername, doctorUsername, date, time);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment booked successfully.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-
         return new RedirectView("/patient/doctors", true, false);
     }
 
@@ -221,7 +213,6 @@ public class PatientController {
         } catch (DoctorNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "patient_pages/patient_doctor_schedule";
     }
 

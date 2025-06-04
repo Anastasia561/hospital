@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.patient.PatientForAdminDto;
 import pl.edu.hospital.dto.patient.PatientForProfileDto;
 import pl.edu.hospital.dto.patient.PatientForRecordDto;
@@ -53,6 +54,7 @@ public class PatientService {
         return PatientMapper.toPatientForProfileDto(patient);
     }
 
+    @Transactional
     public void updatePatient(PatientForProfileDto dto) {
         Patient patient = patientRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new PatientNotFoundException(dto.getUsername()));

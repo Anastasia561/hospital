@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.appointment.AppointmentForDoctorDto;
 import pl.edu.hospital.dto.appointment.AppointmentForPatientDto;
 import pl.edu.hospital.entity.Appointment;
@@ -37,15 +38,17 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final ConsultationRepository consultationRepository;
     private final AppointmentMapper appointmentMapper;
+    private final EmailService emailService;
 
     public AppointmentService(AppointmentRepository appointmentRepository, PatientRepository patientRepository,
                               DoctorRepository doctorRepository, ConsultationRepository consultationRepository,
-                              AppointmentMapper appointmentMapper) {
+                              AppointmentMapper appointmentMapper, EmailService emailService) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.consultationRepository = consultationRepository;
         this.appointmentMapper = appointmentMapper;
+        this.emailService = emailService;
     }
 
     public Map<Status, Integer> getStatisticsForDoctorAndPeriod(String username, LocalDate startDate, LocalDate endDate) {
@@ -109,11 +112,21 @@ public class AppointmentService {
                 ));
     }
 
-    public void updateAppointmentStatus(Status newStatus, int id) {
+    @Transactional
+    public void updateAppointmentStatus(Status newStatus, int id, boolean byDoctor) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppointmentNotFoundException(id));
         appointment.setStatus(newStatus);
         appointmentRepository.save(appointment);
+        if (newStatus == Status.CANCELLED) {
+            if (byDoctor) {
+                emailService.sendCancellationEmailForDoctorByDoctor(id);
+                emailService.sendCancellationEmailForPatientByDoctor(id);
+            } else {
+                emailService.sendCancellationEmailToPatientByPatient(id);
+                emailService.sendCancellationEmailForDoctorByPatient(id);
+            }
+        }
     }
 
     public LocalDate getAppointmentDateById(int id) {
@@ -121,20 +134,22 @@ public class AppointmentService {
                 .orElseThrow(() -> new AppointmentNotFoundException(id)).getDate();
     }
 
+    @Transactional
     public void cancelForDeletedConsultation(int consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new ConsultationNotFoundException(consultationId + ""));
         List<Appointment> apps = appointmentRepository.getAllDayOfWeekAndInTimeRange(consultation.getWorkingDay().getMysqlDay(),
                 consultation.getStartTime(), consultation.getEndTime());
-        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId()));
+        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId(), true));
     }
 
+    @Transactional
     public void cancelForUpdatedConsultation(int consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new ConsultationNotFoundException(consultationId + ""));
         List<Appointment> apps = appointmentRepository.getAllDayOfWeekAndNotInTimeRange(consultation.getWorkingDay().getMysqlDay(),
                 consultation.getStartTime(), consultation.getEndTime());
-        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId()));
+        apps.forEach(a -> updateAppointmentStatus(Status.CANCELLED, a.getId(), true));
     }
 
     public List<LocalTime> getAvailableTimeSlotsForDoctorByUsername(String username, LocalDate date) {
@@ -163,6 +178,7 @@ public class AppointmentService {
         return result;
     }
 
+    @Transactional
     public void createAppointment(String patientUsername, String doctorUsername, LocalDate date, LocalTime time) {
         Patient patient = patientRepository.findByUsername(patientUsername)
                 .orElseThrow(() -> new PatientNotFoundException(patientUsername));
@@ -175,5 +191,6 @@ public class AppointmentService {
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
         appointmentRepository.save(appointment);
+        emailService.sendConfirmationEmail(patientUsername, doctorUsername, date, time);
     }
 }

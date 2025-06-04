@@ -48,17 +48,16 @@ public class DoctorController {
     private final AppointmentService appointmentService;
     private final RecordService recordService;
     private final PatientService patientService;
-    private final EmailService emailService;
+//    private final EmailService emailService;
 
     public DoctorController(DoctorService doctorService, ConsultationService consultationService,
                             AppointmentService appointmentService, RecordService recordService,
-                            PatientService patientService, EmailService emailService) {
+                            PatientService patientService) {
         this.doctorService = doctorService;
         this.consultationService = consultationService;
         this.appointmentService = appointmentService;
         this.recordService = recordService;
         this.patientService = patientService;
-        this.emailService = emailService;
     }
 
     @GetMapping("/home")
@@ -140,9 +139,9 @@ public class DoctorController {
     public RedirectView cancelAppointment(@RequestParam(name = "id") int appointmentId,
                                           RedirectAttributes redirectAttributes) {
         try {
-            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId);
-            emailService.sendCancellationEmailForDoctorByDoctor(appointmentId);
-            emailService.sendCancellationEmailForPatientByDoctor(appointmentId);
+            appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId, true);
+//            emailService.sendCancellationEmailForDoctorByDoctor(appointmentId);
+//            emailService.sendCancellationEmailForPatientByDoctor(appointmentId);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -159,7 +158,6 @@ public class DoctorController {
         } catch (PatientNotFoundException | RecordNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "doctor_pages/doctor_record";
     }
 
@@ -183,7 +181,7 @@ public class DoctorController {
         dto.setAppointmentId(appId);
         try {
             recordService.saveRecord(dto);
-            appointmentService.updateAppointmentStatus(Status.COMPLETED, appId);
+            appointmentService.updateAppointmentStatus(Status.COMPLETED, appId, true);
             redirectAttributes.addFlashAttribute("successMessage", "Medical record created successfully");
         } catch (AppointmentNotFoundException e) {
             redirectAttributes.addAttribute("errorMessage", e.getMessage());

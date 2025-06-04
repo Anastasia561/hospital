@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.entity.Consultation;
 import pl.edu.hospital.exception.DoctorNotFoundException;
@@ -28,6 +29,7 @@ public class ConsultationService {
                 .toList();
     }
 
+    @Transactional
     public void updateConsultation(ConsultationDto dto) {
         Optional<Consultation> optional = consultationRepository.findById(dto.getId());
         if (optional.isPresent()) {
@@ -38,7 +40,7 @@ public class ConsultationService {
         }
     }
 
-    public void createConsultation(ConsultationDto dto) throws DoctorNotFoundException {
+    public void createConsultation(ConsultationDto dto) {
         Consultation consultation = consultationMapper.toConsultation(dto);
         consultationRepository.save(consultation);
     }

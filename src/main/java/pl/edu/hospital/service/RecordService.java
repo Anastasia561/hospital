@@ -1,6 +1,7 @@
 package pl.edu.hospital.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.record.RecordCreationRequestDto;
 import pl.edu.hospital.dto.record.RecordForDoctorDto;
 import pl.edu.hospital.dto.record.RecordForPatientDto;
@@ -40,6 +41,7 @@ public class RecordService {
         return recordMapper.toRecordForPatientDto(record);
     }
 
+    @Transactional
     public void saveRecord(RecordCreationRequestDto dto) {
         Record record = recordMapper.toRecord(dto);
 

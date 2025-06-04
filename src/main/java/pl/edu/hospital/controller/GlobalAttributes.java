@@ -10,7 +10,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalAttributes {
-    private AdminService adminService;
+    private final AdminService adminService;
     private static final Map<Language, Map<String, String>> TRANSLATED_LABELS = TranslationUtil.translateLabels();
 
     public GlobalAttributes(AdminService adminService) {

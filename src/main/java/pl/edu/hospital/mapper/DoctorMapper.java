@@ -32,7 +32,7 @@ public class DoctorMapper {
         doctor.setExperience(dto.getExperience());
         doctor.setEmploymentDate(LocalDate.now());
         doctor.setSpecialization(dto.getSpecialization());
-        doctor.setPassword("test");
+        doctor.setPassword(dto.getPassword());
         doctor.setRole(Role.DOCTOR);
         return doctor;
     }

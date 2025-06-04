@@ -35,7 +35,7 @@ public class ConsultationService {
             Consultation consultation = optional.get();
             consultation.setEndTime(dto.getEndTime());
             consultation.setStartTime(dto.getStartTime());
-            consultationRepository.saveAndFlush(consultation);
+            consultationRepository.save(consultation);
         }
     }
 

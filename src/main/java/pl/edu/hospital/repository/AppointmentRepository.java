@@ -1,7 +1,7 @@
 package pl.edu.hospital.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import pl.edu.hospital.entity.Appointment;
 import pl.edu.hospital.entity.enums.Status;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
+public interface AppointmentRepository extends CrudRepository<Appointment, Integer> {
 
     @Query("select count(a) from Appointment a where a.doctor.username=:username and a.status=:status " +
             "and (a.date between :start and :end)")

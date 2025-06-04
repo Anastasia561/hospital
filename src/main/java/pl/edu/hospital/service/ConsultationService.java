@@ -3,7 +3,6 @@ package pl.edu.hospital.service;
 import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.entity.Consultation;
-import pl.edu.hospital.entity.Doctor;
 import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.mapper.ConsultationMapper;
 import pl.edu.hospital.repository.ConsultationRepository;
@@ -15,17 +14,17 @@ import java.util.Optional;
 @Service
 public class ConsultationService {
     private final ConsultationRepository consultationRepository;
-    private final DoctorRepository doctorRepository;
+    private final ConsultationMapper consultationMapper;
 
-    public ConsultationService(ConsultationRepository consultationRepository, DoctorRepository doctorRepository) {
+    public ConsultationService(ConsultationRepository consultationRepository, ConsultationMapper consultationMapper) {
         this.consultationRepository = consultationRepository;
-        this.doctorRepository = doctorRepository;
+        this.consultationMapper = consultationMapper;
     }
 
     public List<ConsultationDto> getAllByDoctorUsername(String username) {
         return consultationRepository.findAllByDoctorUsername(username)
                 .stream()
-                .map(ConsultationMapper::toConsultationDto)
+                .map(consultationMapper::toConsultationDto)
                 .toList();
     }
 
@@ -40,9 +39,7 @@ public class ConsultationService {
     }
 
     public void createConsultation(ConsultationDto dto) throws DoctorNotFoundException {
-        Doctor doctor = doctorRepository.findByUsername(dto.getDoctorUsername())
-                .orElseThrow(() -> new DoctorNotFoundException(dto.getDoctorUsername()));
-        Consultation consultation = ConsultationMapper.toConsultation(dto, doctor);
+        Consultation consultation = consultationMapper.toConsultation(dto);
         consultationRepository.save(consultation);
     }
 

@@ -15,15 +15,17 @@ import java.util.List;
 @Service
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    private final DoctorMapper doctorMapper;
 
-    public DoctorService(DoctorRepository doctorRepository) {
+    public DoctorService(DoctorRepository doctorRepository, DoctorMapper doctorMapper) {
         this.doctorRepository = doctorRepository;
+        this.doctorMapper = doctorMapper;
     }
 
     public List<DoctorForAdminDto> getAllForAdmin() {
         return doctorRepository.findAll()
                 .stream()
-                .map(DoctorMapper::toDoctorForAdminDto)
+                .map(doctorMapper::toDoctorForAdminDto)
                 .toList();
     }
 
@@ -36,25 +38,25 @@ public class DoctorService {
     public List<DoctorForAdminDto> getAllBySpecialization(Specialization specialization) {
         return doctorRepository.findAllBySpecialization(specialization)
                 .stream()
-                .map(DoctorMapper::toDoctorForAdminDto)
+                .map(doctorMapper::toDoctorForAdminDto)
                 .toList();
     }
 
     public void createDoctor(DoctorRegistrationDto dto) {
-        Doctor doctor = DoctorMapper.toDoctor(dto);
+        Doctor doctor = doctorMapper.toDoctor(dto);
         doctorRepository.save(doctor);
     }
 
     public DoctorForAdminDto findByUsernameForAdminDto(String username) {
         Doctor doctor = doctorRepository.findByUsername(username)
                 .orElseThrow(() -> new DoctorNotFoundException(username));
-        return DoctorMapper.toDoctorForAdminDto(doctor);
+        return doctorMapper.toDoctorForAdminDto(doctor);
     }
 
     public DoctorForProfileDto findByUsernameForProfileDto(String username) {
         Doctor doctor = doctorRepository.findByUsername(username)
                 .orElseThrow(() -> new DoctorNotFoundException(username));
-        return DoctorMapper.toDoctorForProfileDto(doctor);
+        return doctorMapper.toDoctorForProfileDto(doctor);
     }
 
     public void updateDoctor(DoctorForProfileDto dto) {

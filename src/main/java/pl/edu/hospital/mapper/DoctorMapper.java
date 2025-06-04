@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Component
 public class DoctorMapper {
-    public static DoctorForAdminDto toDoctorForAdminDto(Doctor doctor) {
+    public DoctorForAdminDto toDoctorForAdminDto(Doctor doctor) {
         DoctorForAdminDto dto = new DoctorForAdminDto();
         dto.setUsername(doctor.getUsername());
         dto.setFullName(doctor.getFirstName() + " " + doctor.getLastName());
@@ -22,7 +22,7 @@ public class DoctorMapper {
         return dto;
     }
 
-    public static Doctor toDoctor(DoctorRegistrationDto dto) {
+    public Doctor toDoctor(DoctorRegistrationDto dto) {
         Doctor doctor = new Doctor();
         doctor.setFirstName(dto.getFirstName());
         doctor.setLastName(dto.getLastName());
@@ -37,7 +37,7 @@ public class DoctorMapper {
         return doctor;
     }
 
-    public static DoctorForProfileDto toDoctorForProfileDto(Doctor doctor) {
+    public DoctorForProfileDto toDoctorForProfileDto(Doctor doctor) {
         DoctorForProfileDto dto = new DoctorForProfileDto();
         dto.setUsername(doctor.getUsername());
         dto.setEmail(doctor.getEmail());

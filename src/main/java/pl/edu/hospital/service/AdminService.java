@@ -10,15 +10,17 @@ import pl.edu.hospital.repository.AdminRepository;
 @Service
 public class AdminService {
     private final AdminRepository adminRepository;
+    private final AdminMapper adminMapper;
 
-    public AdminService(AdminRepository adminRepository) {
+    public AdminService(AdminRepository adminRepository, AdminMapper adminMapper) {
         this.adminRepository = adminRepository;
+        this.adminMapper=adminMapper;
     }
 
     public AdminForProfileDto findByUsernameForProfileDto(String username) {
         Admin admin = adminRepository.findByUsername(username)
                 .orElseThrow(() -> new AdminNotFoundException(username));
-        return AdminMapper.adminForProfileDto(admin);
+        return adminMapper.adminForProfileDto(admin);
     }
 
     public void updateAdmin(AdminForProfileDto dto) {

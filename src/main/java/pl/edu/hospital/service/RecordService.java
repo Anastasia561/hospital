@@ -4,20 +4,11 @@ import org.springframework.stereotype.Service;
 import pl.edu.hospital.dto.record.RecordCreationRequestDto;
 import pl.edu.hospital.dto.record.RecordForDoctorDto;
 import pl.edu.hospital.dto.record.RecordForPatientDto;
-import pl.edu.hospital.entity.Appointment;
-import pl.edu.hospital.entity.Doctor;
-import pl.edu.hospital.entity.Patient;
 import pl.edu.hospital.entity.Prescription;
 import pl.edu.hospital.entity.Record;
-import pl.edu.hospital.exception.AppointmentNotFoundException;
-import pl.edu.hospital.exception.DoctorNotFoundException;
-import pl.edu.hospital.exception.PatientNotFoundException;
 import pl.edu.hospital.exception.RecordNotFoundException;
 import pl.edu.hospital.mapper.PrescriptionMapper;
 import pl.edu.hospital.mapper.RecordMapper;
-import pl.edu.hospital.repository.AppointmentRepository;
-import pl.edu.hospital.repository.DoctorRepository;
-import pl.edu.hospital.repository.PatientRepository;
 import pl.edu.hospital.repository.RecordRepository;
 
 import java.util.ArrayList;
@@ -27,44 +18,33 @@ import java.util.stream.Collectors;
 @Service
 public class RecordService {
     private final RecordRepository recordRepository;
-    private final PatientRepository patientRepository;
-    private final AppointmentRepository appointmentRepository;
-    private final DoctorRepository doctorRepository;
+    private final RecordMapper recordMapper;
+    private final PrescriptionMapper prescriptionMapper;
 
-    public RecordService(RecordRepository recordRepository, PatientRepository patientRepository,
-                         AppointmentRepository appointmentRepository, DoctorRepository doctorRepository) {
+    public RecordService(RecordRepository recordRepository,
+                         RecordMapper recordMapper, PrescriptionMapper prescriptionMapper) {
         this.recordRepository = recordRepository;
-        this.patientRepository = patientRepository;
-        this.appointmentRepository = appointmentRepository;
-        this.doctorRepository = doctorRepository;
+        this.recordMapper = recordMapper;
+        this.prescriptionMapper = prescriptionMapper;
     }
 
     public RecordForDoctorDto getRecordForDoctorByAppointmentId(int id) {
         Record record = recordRepository.findByAppointmentId(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
-        Patient patient = patientRepository.findPatientByAppointmentId(id)
-                .orElseThrow(() -> new PatientNotFoundException(id + ""));
-
-        return RecordMapper.toRecordForDoctorDto(record, patient);
+        return recordMapper.toRecordForDoctorDto(record);
     }
 
     public RecordForPatientDto getRecordForPatientByAppointmentId(int id) {
         Record record = recordRepository.findByAppointmentId(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
-        Doctor doctor = doctorRepository.findDoctorByAppointmentId(id)
-                .orElseThrow(() -> new DoctorNotFoundException(id + ""));
-
-        return RecordMapper.toRecordForPatientDto(record, doctor);
+        return recordMapper.toRecordForPatientDto(record);
     }
 
     public void saveRecord(RecordCreationRequestDto dto) {
-        Appointment appointment = appointmentRepository.findById(dto.getAppointmentId())
-                .orElseThrow(() -> new AppointmentNotFoundException(dto.getAppointmentId()));
-
-        Record record = RecordMapper.toRecord(dto, appointment);
+        Record record = recordMapper.toRecord(dto);
 
         List<Prescription> prescriptions = dto.getPrescriptions().stream()
-                .map(PrescriptionMapper::toPrescription)
+                .map(prescriptionMapper::toPrescription)
                 .peek(p -> p.setRecord(record))
                 .collect(Collectors.toCollection(ArrayList::new));
 

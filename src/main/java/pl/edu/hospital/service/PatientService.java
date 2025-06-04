@@ -14,15 +14,17 @@ import java.util.List;
 @Service
 public class PatientService {
     private final PatientRepository patientRepository;
+    private final PatientMapper patientMapper;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, PatientMapper patientMapper) {
         this.patientRepository = patientRepository;
+        this.patientMapper = patientMapper;
     }
 
     public List<PatientForAdminDto> getAllForAdmin() {
         return patientRepository.findAll()
                 .stream()
-                .map(PatientMapper::toPatientForAdminDto)
+                .map(patientMapper::toPatientForAdminDto)
                 .toList();
     }
 
@@ -35,14 +37,14 @@ public class PatientService {
     public List<PatientForAdminDto> getAllForAdminByEmail(String email) {
         return patientRepository.getPatientsByEmail(email)
                 .stream()
-                .map(PatientMapper::toPatientForAdminDto)
+                .map(patientMapper::toPatientForAdminDto)
                 .toList();
     }
 
     public PatientForRecordDto getPatientByAppointmentId(int appId) {
         Patient patient = patientRepository.findPatientByAppointmentId(appId)
                 .orElseThrow(() -> new PatientNotFoundException(appId + ""));
-        return PatientMapper.toPatientForRecordDto(patient);
+        return patientMapper.toPatientForRecordDto(patient);
     }
 
     public PatientForProfileDto getPatientByUsername(String username) {

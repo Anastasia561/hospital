@@ -36,13 +36,16 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final ConsultationRepository consultationRepository;
+    private final AppointmentMapper appointmentMapper;
 
     public AppointmentService(AppointmentRepository appointmentRepository, PatientRepository patientRepository,
-                              DoctorRepository doctorRepository, ConsultationRepository consultationRepository) {
+                              DoctorRepository doctorRepository, ConsultationRepository consultationRepository,
+                              AppointmentMapper appointmentMapper) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.consultationRepository = consultationRepository;
+        this.appointmentMapper = appointmentMapper;
     }
 
     public Map<Status, Integer> getStatisticsForDoctorAndPeriod(String username, LocalDate startDate, LocalDate endDate) {
@@ -67,11 +70,7 @@ public class AppointmentService {
                 appointmentRepository.findByPatientUsernameInRange(username, startDate, endDate);
 
         return allAppointments.stream()
-                .map(a -> {
-                    Doctor doctor = doctorRepository.findById(a.getDoctor().getId())
-                            .orElseThrow(() -> new DoctorNotFoundException(a.getDoctor().getUsername()));
-                    return AppointmentMapper.toAppointmentForPatientDto(a, doctor);
-                })
+                .map(appointmentMapper::toAppointmentForPatientDto)
                 .filter(a -> status == null || a.getStatus() == status)
                 .filter(a -> specialization == null || a.getSpecialization() == specialization)
                 .collect(Collectors.groupingBy(
@@ -96,11 +95,7 @@ public class AppointmentService {
                 appointmentRepository.findByDoctorUsernameInRange(username, startDate, endDate);
 
         return allAppointments.stream()
-                .map(a -> {
-                    Patient patient = patientRepository.findById(a.getPatient().getId())
-                            .orElseThrow(() -> new PatientNotFoundException(a.getPatient().getUsername()));
-                    return AppointmentMapper.toAppointmentForDoctorDto(a, patient);
-                })
+                .map(appointmentMapper::toAppointmentForDoctorDto)
                 .filter(a -> status == null || a.getStatus() == status)
                 .collect(Collectors.groupingBy(
                         AppointmentForDoctorDto::getDate,

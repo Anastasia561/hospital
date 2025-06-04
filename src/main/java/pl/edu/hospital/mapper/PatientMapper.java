@@ -8,7 +8,7 @@ import pl.edu.hospital.entity.Patient;
 
 @Component
 public class PatientMapper {
-    public static PatientForAdminDto toPatientForAdminDto(Patient patient) {
+    public PatientForAdminDto toPatientForAdminDto(Patient patient) {
         PatientForAdminDto dto = new PatientForAdminDto();
         dto.setFullName(patient.getFirstName() + " " + patient.getLastName());
         dto.setPhone(patient.getPhoneNumber());
@@ -19,7 +19,7 @@ public class PatientMapper {
         return dto;
     }
 
-    public static PatientForRecordDto toPatientForRecordDto(Patient patient) {
+    public PatientForRecordDto toPatientForRecordDto(Patient patient) {
         PatientForRecordDto dto = new PatientForRecordDto();
         dto.setFullName(patient.getFirstName() + " " + patient.getLastName());
         dto.setPhoneNumber(patient.getPhoneNumber());

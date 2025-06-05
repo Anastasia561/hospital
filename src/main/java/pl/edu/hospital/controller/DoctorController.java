@@ -2,6 +2,8 @@ package pl.edu.hospital.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +33,6 @@ import pl.edu.hospital.exception.RecordNotFoundException;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
-import pl.edu.hospital.service.EmailService;
 import pl.edu.hospital.service.PatientService;
 import pl.edu.hospital.service.RecordService;
 
@@ -51,7 +52,6 @@ public class DoctorController {
     private final AppointmentService appointmentService;
     private final RecordService recordService;
     private final PatientService patientService;
-//    private final EmailService emailService;
 
     public DoctorController(DoctorService doctorService, ConsultationService consultationService,
                             AppointmentService appointmentService, RecordService recordService,
@@ -71,11 +71,8 @@ public class DoctorController {
     @GetMapping("/schedule")
     public String getDoctorSchedule(Model model) {
         try {
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            String username = auth.getName();
-//            --using security authentication
-
-            String username = "rgarcia";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
 
             Map<WorkingDay, List<ConsultationDto>> scheduleByDay = consultationService
                     .getAllByDoctorUsername(username).stream()
@@ -90,7 +87,6 @@ public class DoctorController {
         } catch (DoctorNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "doctor_pages/doctor_schedule";
     }
 
@@ -102,8 +98,8 @@ public class DoctorController {
                                                         @RequestParam(required = false) Status status,
                                                         RedirectAttributes redirectAttributes) {
 
-        //using authentication
-        String username = "rgarcia";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
         LinkedHashMap<LocalDate, List<AppointmentForDoctorDto>> appointments =
                 appointmentService.getAppointmentsForDoctorFiltered(username, startDate, endDate, status);
@@ -126,8 +122,9 @@ public class DoctorController {
 
     @GetMapping("/appointments")
     public String getAppointmentsForDoctor(Model model) {
-        //using authentication
-        String username = "rgarcia";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
         try {
             model.addAttribute("dFullName", doctorService.getDoctorFullNameByUsername(username));
             model.addAttribute("statuses", Status.values());
@@ -143,8 +140,6 @@ public class DoctorController {
                                           RedirectAttributes redirectAttributes) {
         try {
             appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId, true);
-//            emailService.sendCancellationEmailForDoctorByDoctor(appointmentId);
-//            emailService.sendCancellationEmailForPatientByDoctor(appointmentId);
             redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -194,8 +189,9 @@ public class DoctorController {
 
     @GetMapping("/profile")
     public String showProfile(Model model) {
-        //using authentication
-        String username = "rgarcia";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
         DoctorForProfileDto dto = doctorService.findByUsernameForProfileDto(username);
         model.addAttribute("doctor", dto);
         model.addAttribute("editMode", false);
@@ -205,8 +201,9 @@ public class DoctorController {
 
     @GetMapping("/profile/edit")
     public String editProfile(Model model) {
-        //using authentication
-        String username = "rgarcia";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
         DoctorForProfileDto dto = doctorService.findByUsernameForProfileDto(username);
         model.addAttribute("doctor", dto);
         model.addAttribute("languages", Language.values());

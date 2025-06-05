@@ -2,6 +2,8 @@ package pl.edu.hospital.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,9 +32,7 @@ import pl.edu.hospital.service.AdminService;
 import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
-import pl.edu.hospital.service.EmailService;
 import pl.edu.hospital.service.PatientService;
-import pl.edu.hospital.utils.TranslationUtil;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -293,14 +293,13 @@ public class AdminController {
         } catch (DoctorNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
-
         return "admin_pages/admin_doctor_schedule";
     }
 
     @GetMapping("/profile")
     public String showProfile(Model model) {
-        //using authentication
-        String username = "pscott";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         AdminForProfileDto dto = adminService.findByUsernameForProfileDto(username);
         model.addAttribute("admin", dto);
         model.addAttribute("editMode", false);
@@ -310,8 +309,8 @@ public class AdminController {
 
     @GetMapping("/profile/edit")
     public String editProfile(Model model) {
-        //using authentication
-        String username = "pscott";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         AdminForProfileDto dto = adminService.findByUsernameForProfileDto(username);
         model.addAttribute("admin", dto);
         model.addAttribute("languages", Language.values());

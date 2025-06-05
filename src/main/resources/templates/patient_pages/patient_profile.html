@@ -21,20 +21,28 @@
                 <div class="card shadow rounded-4 border-0">
                     <div class="card-body px-4 py-5">
 
-                        <form th:action="@{/patient/profile/update}" method="post">
-                            <input type="hidden" name="username" th:value="${patient.username}"/>
+                        <form th:action="@{/patient/profile/update}" th:object="${patient}" method="post" novalidate>
                             <div class="row mb-4">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label fw-semibold">First Name</label>
                                     <input type="text" name="firstName" class="form-control"
-                                           th:value="${patient.firstName}"
+                                           th:value="*{firstName}"
                                            th:readonly="${!editMode}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                                         th:errors="*{firstName}"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label fw-semibold">Last Name</label>
                                     <input type="text" name="lastName" class="form-control"
-                                           th:value="${patient.lastName}"
+                                           th:value="*{lastName}"
                                            th:readonly="${!editMode}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                                         th:errors="*{lastName}"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" name="username" class="form-control"
+                                           th:value="*{username}" readonly>
                                 </div>
                             </div>
 
@@ -46,8 +54,10 @@
                                             <i class="fas fa-envelope text-primary"></i>
                                         </span>
                                         <input type="email" name="email" class="form-control"
-                                               th:value="${patient.email}"
+                                               th:value="*{email}"
                                                th:readonly="${!editMode}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('email')}"
+                                             th:errors="*{email}"></div>
                                     </div>
                                 </div>
 
@@ -58,8 +68,10 @@
                                             <i class="fas fa-phone text-success"></i>
                                         </span>
                                         <input type="text" name="phoneNumber" class="form-control"
-                                               th:value="${patient.phoneNumber}"
+                                               th:value="*{phoneNumber}"
                                                th:readonly="${!editMode}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+                                             th:errors="*{phoneNumber}"></div>
                                     </div>
                                 </div>
                             </div>
@@ -72,8 +84,10 @@
                                             <i class="fas fa-calendar-alt text-primary"></i>
                                         </span>
                                         <input type="date" name="birthDate" class="form-control"
-                                               th:value="${patient.birthDate}"
+                                               th:value="*{birthDate}"
                                                th:readonly="${!editMode}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('birthDate')}"
+                                             th:errors="*{birthDate}"></div>
                                     </div>
                                 </div>
 
@@ -84,7 +98,7 @@
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-language text-info"></i>
                                         </span>
-                                        <input type="text" class="form-control" th:value="${patient.language}" readonly>
+                                        <input type="text" class="form-control" th:value="*{language}" readonly>
                                     </div>
 
                                     <div class="input-group" th:if="${editMode}">
@@ -110,7 +124,7 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                      </span>
                                     <input type="text" class="form-control"
-                                           th:value="${patient.country + ', ' + patient.city + ', ' + patient.street + ', ' + patient.number}"
+                                           th:value="*{country + ', ' + city + ', ' + street + ', ' + number}"
                                            readonly>
                                 </div>
 
@@ -120,25 +134,33 @@
                                             <label for="country" class="form-label fw-semibold">Country</label>
                                             <input id="country" type="text" class="form-control" name="country"
                                                    placeholder="Country"
-                                                   th:value="${patient.country}" required>
+                                                   th:value="*{country}" required>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('country')}"
+                                                 th:errors="*{country}"></div>
                                         </div>
                                         <div class="col-md-3">
                                             <label for="city" class="form-label fw-semibold">City</label>
                                             <input id="city" type="text" class="form-control" name="city"
                                                    placeholder="City"
-                                                   th:value="${patient.city}" required>
+                                                   th:value="*{city}" required>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('city')}"
+                                                 th:errors="*{city}"></div>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="street" class="form-label fw-semibold">Street</label>
                                             <input id="street" type="text" class="form-control" name="street"
                                                    placeholder="Street"
-                                                   th:value="${patient.street}" required>
+                                                   th:value="*{street}" required>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('street')}"
+                                                 th:errors="*{street}"></div>
                                         </div>
                                         <div class="col-md-2">
                                             <label for="number" class="form-label fw-semibold">Number</label>
                                             <input id="number" type="text" class="form-control" name="number"
                                                    placeholder="Number"
-                                                   th:value="${patient.number}" required>
+                                                   th:value="*{number}" required>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('number')}"
+                                                 th:errors="*{number}"></div>
                                         </div>
                                     </div>
                                 </div>

@@ -1,8 +1,10 @@
 package pl.edu.hospital.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -239,8 +241,15 @@ public class PatientController {
     }
 
     @PostMapping("/profile/update")
-    public RedirectView updateProfile(@ModelAttribute PatientForProfileDto dto) {
-        patientService.updatePatient(dto);
+    public Object updateProfile(@Valid @ModelAttribute("patient") PatientForProfileDto patient,
+                                BindingResult bindingResult,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("languages", Language.values());
+            model.addAttribute("editMode", true);
+            return "patient_pages/patient_profile";
+        }
+        patientService.updatePatient(patient);
         return new RedirectView("/patient/profile", true, false);
     }
 }

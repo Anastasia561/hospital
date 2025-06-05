@@ -320,7 +320,13 @@ public class AdminController {
     }
 
     @PostMapping("/profile/update")
-    public RedirectView updateProfile(@ModelAttribute AdminForProfileDto dto) {
+    public Object updateProfile(@Valid @ModelAttribute("admin") AdminForProfileDto dto,
+                                BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("editMode", true);
+            model.addAttribute("languages", Language.values());
+            return "admin_pages/admin_profile";
+        }
         adminService.updateAdmin(dto);
         return new RedirectView("/admin/profile", true, false);
     }

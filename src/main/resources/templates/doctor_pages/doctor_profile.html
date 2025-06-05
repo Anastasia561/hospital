@@ -21,20 +21,28 @@
                 <div class="card shadow rounded-4 border-0">
                     <div class="card-body px-4 py-5">
 
-                        <form th:action="@{/doctor/profile/update}" method="post">
-                            <input type="hidden" name="username" th:value="${doctor.username}"/>
+                        <form th:action="@{/doctor/profile/update}" th:object="${doctor}" method="post" novalidate>
                             <div class="row mb-4">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label fw-semibold">First Name</label>
                                     <input type="text" name="firstName" class="form-control"
-                                           th:value="${doctor.firstName}"
+                                           th:value="*{firstName}"
                                            th:readonly="${!editMode}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                                         th:errors="*{firstName}"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label fw-semibold">Last Name</label>
                                     <input type="text" name="lastName" class="form-control"
-                                           th:value="${doctor.lastName}"
+                                           th:value="*{lastName}"
                                            th:readonly="${!editMode}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                                         th:errors="*{lastName}"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Username</label>
+                                    <input type="text" name="username" class="form-control"
+                                           th:value="*{username}" readonly>
                                 </div>
                             </div>
 
@@ -46,8 +54,10 @@
                                             <i class="fas fa-envelope text-primary"></i>
                                         </span>
                                         <input type="email" name="email" class="form-control"
-                                               th:value="${doctor.email}"
+                                               th:value="*{email}"
                                                th:readonly="${!editMode}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('email')}"
+                                             th:errors="*{email}"></div>
                                     </div>
                                 </div>
 
@@ -58,7 +68,7 @@
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-language text-info"></i>
                                         </span>
-                                        <input type="text" class="form-control" th:value="${doctor.language}" readonly>
+                                        <input type="text" class="form-control" th:value="*{language}" readonly>
                                     </div>
 
                                     <div class="input-group" th:if="${editMode}">
@@ -84,7 +94,7 @@
                                             <i class="fas fa-calendar-alt text-info"></i>
                                         </span>
                                         <input type="date" name="employmentDate" class="form-control"
-                                               th:value="${doctor.employmentDate}" readonly>
+                                               th:value="*{employmentDate}" readonly>
                                     </div>
                                 </div>
 
@@ -95,7 +105,7 @@
                                             <i class="fas fa-stethoscope text-primary"></i>
                                         </span>
                                         <input type="text" name="specialization" class="form-control"
-                                               th:value="${doctor.specialization}" readonly>
+                                               th:value="*{specialization}" readonly>
                                     </div>
                                 </div>
                             </div>

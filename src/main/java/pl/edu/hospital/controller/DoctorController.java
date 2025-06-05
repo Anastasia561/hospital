@@ -1,8 +1,10 @@
 package pl.edu.hospital.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import pl.edu.hospital.dto.record.RecordCreationRequestDto;
 import pl.edu.hospital.dto.record.RecordForDoctorDto;
 import pl.edu.hospital.entity.enums.Frequency;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.entity.enums.Specialization;
 import pl.edu.hospital.entity.enums.Status;
 import pl.edu.hospital.entity.enums.WorkingDay;
 import pl.edu.hospital.exception.AppointmentNotFoundException;
@@ -212,7 +215,14 @@ public class DoctorController {
     }
 
     @PostMapping("/profile/update")
-    public RedirectView updateProfile(@ModelAttribute DoctorForProfileDto dto) {
+    public Object updateProfile(@Valid @ModelAttribute("doctor") DoctorForProfileDto dto,
+                                BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("languages", Language.values());
+            model.addAttribute("specializations", Specialization.values());
+            model.addAttribute("editMode", true);
+            return "doctor_pages/doctor_profile";
+        }
         doctorService.updateDoctor(dto);
         return new RedirectView("/doctor/profile", true, false);
     }

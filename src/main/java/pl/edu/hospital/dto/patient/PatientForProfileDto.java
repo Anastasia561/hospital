@@ -1,16 +1,30 @@
 package pl.edu.hospital.dto.patient;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import pl.edu.hospital.dto.PersonForProfileDto;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.validation.annotation.ValidPhone;
 
 import java.time.LocalDate;
 
 public class PatientForProfileDto extends PersonForProfileDto {
+    @Past
     private LocalDate birthDate;
+    @ValidPhone
     private String phoneNumber;
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String country;
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String city;
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String street;
+    @Positive
     private int number;
 
     public LocalDate getBirthDate() {

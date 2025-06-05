@@ -71,7 +71,7 @@ public class EmailService {
         Doctor doctor = appointment.getDoctor();
         Patient patient = appointment.getPatient();
 
-        message.setTo(appointment.getPatient().getEmail());
+        message.setTo(patient.getEmail());
         message.setSubject("Appointment cancellation – MediCore");
         message.setText("Dear " + patient.getFirstName() + " " + patient.getLastName() + ",\n\n" +
                 "We would like to inform you that your appointment at MediCore has been successfully canceled.\n\n" +
@@ -97,7 +97,7 @@ public class EmailService {
         Doctor doctor = appointment.getDoctor();
         Patient patient = appointment.getPatient();
 
-        message.setTo(patient.getEmail());
+        message.setTo(doctor.getEmail());
         message.setSubject("Appointment cancellation – MediCore");
         message.setText("Dear Dr. " + doctor.getFirstName() + " " + doctor.getLastName() + ",\n\n" +
                 "We would like to inform you that an appointment has been canceled by the patient.\n\n" +
@@ -119,11 +119,12 @@ public class EmailService {
         Appointment appointment = appointmentRepository.findById(appId)
                 .orElseThrow(() -> new AppointmentNotFoundException(appId));
 
+        Doctor doctor = appointment.getDoctor();
         Patient patient = appointment.getPatient();
 
-        message.setTo(patient.getEmail());
+        message.setTo(doctor.getEmail());
         message.setSubject("Appointment cancellation – MediCore");
-        message.setText("Dear " + patient.getFirstName() + " " + patient.getLastName() + ",\n\n" +
+        message.setText("Dear " + doctor.getFirstName() + " " + doctor.getLastName() + ",\n\n" +
                 "We would like to inform you that your appointment at MediCore has been successfully canceled.\n\n" +
                 "Canceled appointment details:\n" +
                 "- Patient: " + patient.getFirstName() + " " + patient.getLastName() + "\n" +

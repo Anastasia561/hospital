@@ -11,8 +11,8 @@
 
 <div layout:fragment="content">
     <div th:fragment="content" class="text-center mt-4 mb-5">
-        <h1>Welcome to MediCore</h1>
-        <h3>Your platform for managing patients and appointments efficiently</h3>
+        <h1 th:text="#{pl.edu.hospital.welcome}">Welcome to MediCore</h1>
+        <h3 th:text="#{pl.edu.hospital.doctor.slogan}">Your platform for managing patients and appointments efficiently</h3>
 
         <img th:src="@{/images/medicore_home.png}" alt="MediCore Banner" class="img-fluid mt-4"
              style="max-width: 600px;">

@@ -11,52 +11,52 @@
      th:replace="~{fragments/nav :: nav-doctor}"></div>
 
 <div layout:fragment="content" class="container mt-5">
-    <h3 class="mb-4">Medical Record Form</h3>
+    <h3 class="mb-4" th:text="#{pl.edu.hospital.record.form}">Medical Record Form</h3>
 
     <form th:action="@{/doctor/appointments/record/save}" th:object="${recordDto}" method="post">
         <input type="hidden" name="appId" th:value="${appId}"/>
 
         <div class="card shadow p-4">
-            <h5>Patient Info</h5>
-            <p><strong>Name:</strong> <span th:text="${patient.fullName}"></span></p>
-            <p><strong>Email:</strong> <span th:text="${patient.email}"></span></p>
-            <p><strong>Phone:</strong> <span th:text="${patient.phoneNumber}"></span></p>
+            <h5 th:text="#{pl.edu.hospital.record.patientInfo}">Patient Info</h5>
+            <p><strong th:text="#{pl.edu.hospital.profile.name}">Name:</strong> <span th:text="${patient.fullName}"></span></p>
+            <p><strong th:text="#{pl.edu.hospital.profile.email}">Email:</strong> <span th:text="${patient.email}"></span></p>
+            <p><strong th:text="#{pl.edu.hospital.profile.phone}">Phone:</strong> <span th:text="${patient.phoneNumber}"></span></p>
 
             <hr>
 
-            <h5>Appointment Info</h5>
-            <p><strong>Date:</strong> <span th:text="${''+appDate}"></span></p>
+            <h5 th:text="#{pl.edu.hospital.record.appInfo}">Appointment Info</h5>
+            <p><strong th:text="#{pl.edu.hospital.record.date}">Date:</strong> <span th:text="${''+appDate}"></span></p>
 
             <hr>
 
-            <h5 class="mb-3">Medical Notes</h5>
+            <h5 class="mb-3" th:text="#{pl.edu.hospital.record.medNotes}">Medical Notes</h5>
             <div class="mb-3">
-                <label>Diagnosis:</label>
+                <label th:text="#{pl.edu.hospital.record.diagnosis}">Diagnosis:</label>
                 <textarea class="form-control" th:field="*{diagnosis}" required></textarea>
             </div>
 
             <div class="mb-3">
-                <label>Summary:</label>
+                <label th:text="#{pl.edu.hospital.record.summary}">Summary:</label>
                 <textarea class="form-control" th:field="*{summary}" required></textarea>
             </div>
 
             <hr>
 
-            <h5>Prescriptions</h5>
+            <h5 th:text="#{pl.edu.hospital.record.prescriptions}">Prescriptions</h5>
             <div id="prescriptions-container">
                 <div th:each="prescription, iterStat : *{prescriptions}" class="row mb-2 prescription-block">
                     <div class="col-md-3">
-                        <input class="form-control" placeholder="Medicine"
+                        <input class="form-control" th:placeholder="#{pl.edu.hospital.record.medicine}"
                                th:field="*{prescriptions[__${iterStat.index}__].medicine}" required/>
                     </div>
                     <div class="col-md-2">
-                        <input class="form-control" placeholder="Dosage"
+                        <input class="form-control" th:placeholder="#{pl.edu.hospital.record.dosage}"
                                th:field="*{prescriptions[__${iterStat.index}__].dosage}" required/>
                     </div>
                     <div class="col-md-2">
                         <select class="form-select" th:field="*{prescriptions[__${iterStat.index}__].frequency}"
                                 required>
-                            <option value="" disabled selected>Select frequency</option>
+                            <option value="" disabled selected th:text="#{pl.edu.hospital.record.selectFreq}">Select frequency</option>
                             <option th:each="f : ${frequencies}" th:value="${f}" th:text="${f.label}"></option>
                         </select>
                     </div>
@@ -76,14 +76,15 @@
             </div>
 
             <div class="mt-2">
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addPrescription()">+ Add
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addPrescription()"
+                        th:text="#{pl.edu.hospital.record.addPrescription}">+ Add
                     Prescription
                 </button>
             </div>
 
             <div class="d-flex justify-content-center gap-3 mt-3">
-                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                <a th:href="@{/doctor/appointments}" class="btn btn-lg btn-outline-primary">Cancel</a>
+                <button type="submit" class="btn btn-lg btn-primary" th:text="#{pl.edu.hospital.button.save}">Save</button>
+                <a th:href="@{/doctor/appointments}" class="btn btn-lg btn-outline-primary" th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
             </div>
 
         </div>

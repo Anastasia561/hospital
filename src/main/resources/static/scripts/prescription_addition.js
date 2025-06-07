@@ -7,14 +7,16 @@ function addPrescription() {
     block.className = 'row mb-2 prescription-block';
     block.innerHTML = `
             <div class="col-md-3">
-                <input class="form-control" name="prescriptions[${prescriptionIndex}].medicine" placeholder="Medicine" required/>
+                <input class="form-control" name="prescriptions[${prescriptionIndex}].medicine" 
+                placeholder="Medicine" required/>
             </div>
             <div class="col-md-2">
-                <input class="form-control" name="prescriptions[${prescriptionIndex}].dosage" placeholder="Dosage" required/>
+                <input class="form-control" name="prescriptions[${prescriptionIndex}].dosage" 
+                placeholder="Dasage" required/>
             </div>
             <div class="col-md-2">
                 <select class="form-select" name="prescriptions[${prescriptionIndex}].frequency" required>
-                    <option value="" disabled selected>Frequency</option>
+                    <option value="" disabled selected th:placeholder="#{pl.edu.hospital.record.selectFreq}">Frequency</option>
                     <option value="DAILY">Daily</option>
                     <option value="WEEKLY">Weekly</option>
                     <option value="MONTHLY">Monthly</option>

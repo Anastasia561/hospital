@@ -14,8 +14,8 @@
             <div class="col-lg-8">
 
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold">My Profile</h2>
-                    <p class="text-muted">View your personal details</p>
+                    <h2 class="fw-bold" th:text="#{pl.edu.hospital.profile.myProfile}">My Profile</h2>
+                    <p class="text-muted" th:text="#{pl.edu.hospital.profile.slogan}">View your personal details</p>
                 </div>
 
                 <div class="card shadow rounded-4 border-0">
@@ -24,7 +24,8 @@
                         <form th:action="@{/doctor/profile/update}" th:object="${doctor}" method="post" novalidate>
                             <div class="row mb-4">
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">First Name</label>
+                                    <label class="form-label fw-semibold"
+                                           th:text="#{pl.edu.hospital.profile.firstName}">First Name</label>
                                     <input type="text" name="firstName" class="form-control"
                                            th:value="*{firstName}"
                                            th:readonly="${!editMode}">
@@ -32,7 +33,8 @@
                                          th:errors="*{firstName}"></div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Last Name</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.lang}">Last
+                                        Name</label>
                                     <input type="text" name="lastName" class="form-control"
                                            th:value="*{lastName}"
                                            th:readonly="${!editMode}">
@@ -40,7 +42,7 @@
                                          th:errors="*{lastName}"></div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Username</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.username}">Username</label>
                                     <input type="text" name="username" class="form-control"
                                            th:value="*{username}" readonly>
                                 </div>
@@ -48,7 +50,7 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Email</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.email}">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-envelope text-primary"></i>
@@ -62,7 +64,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Language</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.lang}">Language</label>
 
                                     <div class="input-group" th:if="${!editMode}">
                                         <span class="input-group-text bg-white">
@@ -88,7 +90,8 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Employment Date</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.empDate}">Employment
+                                        Date</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-calendar-alt text-info"></i>
@@ -99,7 +102,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Specialization</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.special}">Specialization</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-stethoscope text-primary"></i>
@@ -111,13 +114,17 @@
                             </div>
 
                             <div th:if="${editMode}" class="d-flex justify-content-between mt-5">
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <a th:href="@{/doctor/profile}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.save}">
+                                    Save
+                                </button>
+                                <a th:href="@{/doctor/profile}" class="btn btn-secondary"
+                                   th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
                             </div>
                         </form>
 
                         <div th:if="${!editMode}" class="d-flex justify-content-center mt-5">
-                            <a th:href="@{/doctor/profile/edit}" class="btn btn-outline-primary">Edit</a>
+                            <a th:href="@{/doctor/profile/edit}" class="btn btn-outline-primary"
+                               th:text="#{pl.edu.hospital.button.edit}">Edit</a>
                         </div>
 
                     </div>

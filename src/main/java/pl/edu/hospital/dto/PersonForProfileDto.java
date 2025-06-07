@@ -4,9 +4,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.validation.annotation.UniqueUsername;
+import pl.edu.hospital.validation.annotation.ValidPassword;
 
 public abstract class PersonForProfileDto {
+    @NotEmpty
+    @Size(min = 2, max = 50)
+    @UniqueUsername
     protected String username;
+    @ValidPassword
+    protected String password;
     @NotEmpty
     @Size(min = 3, max = 50)
     protected String firstName;
@@ -16,6 +23,14 @@ public abstract class PersonForProfileDto {
     @Email(message = "Email must be a valid email address")
     protected String email;
     protected Language language;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;

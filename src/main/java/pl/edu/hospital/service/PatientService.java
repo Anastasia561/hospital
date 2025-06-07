@@ -51,7 +51,7 @@ public class PatientService {
     public PatientForProfileDto getPatientByUsername(String username) {
         Patient patient = patientRepository.findByUsername(username)
                 .orElseThrow(() -> new PatientNotFoundException(username));
-        return PatientMapper.toPatientForProfileDto(patient);
+        return patientMapper.toPatientForProfileDto(patient);
     }
 
     @Transactional
@@ -71,6 +71,11 @@ public class PatientService {
         patient.getAddress().getCity().getCountry().setName(dto.getCountry());
         patient.getAddress().getCity().setName(dto.getCity());
 
+        patientRepository.save(patient);
+    }
+
+    public void registerPatient(PatientForProfileDto dto) {
+        Patient patient = patientMapper.toPatient(dto);
         patientRepository.save(patient);
     }
 }

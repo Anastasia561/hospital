@@ -1,5 +1,6 @@
 package pl.edu.hospital.mapper;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Component;
 import pl.edu.hospital.dto.doctor.DoctorForAdminDto;
 import pl.edu.hospital.dto.doctor.DoctorForProfileDto;
@@ -32,7 +33,8 @@ public class DoctorMapper {
         doctor.setExperience(dto.getExperience());
         doctor.setEmploymentDate(LocalDate.now());
         doctor.setSpecialization(dto.getSpecialization());
-        doctor.setPassword(dto.getPassword());
+        doctor.setPassword(PasswordEncoderFactories
+                .createDelegatingPasswordEncoder().encode(dto.getPassword()));
         doctor.setRole(Role.DOCTOR);
         return doctor;
     }

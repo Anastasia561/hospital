@@ -6,12 +6,14 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import pl.edu.hospital.dto.PersonForProfileDto;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.validation.annotation.Adult;
 import pl.edu.hospital.validation.annotation.ValidPhone;
 
 import java.time.LocalDate;
 
 public class PatientForProfileDto extends PersonForProfileDto {
     @Past
+    @Adult
     private LocalDate birthDate;
     @ValidPhone
     private String phoneNumber;
@@ -78,16 +80,18 @@ public class PatientForProfileDto extends PersonForProfileDto {
     @Override
     public String toString() {
         return "PatientForProfileDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", language=" + language +
-                ", birthDate=" + birthDate +
+                "birthDate=" + birthDate +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
                 ", number=" + number +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", language=" + language +
                 '}';
     }
 }

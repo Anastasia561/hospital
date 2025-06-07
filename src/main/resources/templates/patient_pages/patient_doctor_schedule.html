@@ -10,7 +10,7 @@
      th:replace="~{fragments/nav :: nav-patient}"></div>
 
 <div layout:fragment="content">
-    <h3 th:text="'Weekly Schedule for Doctor ' + ${dFullName}"></h3>
+    <h3 th:text="#{pl.edu.hospital.admin.docWeekSchedule}+' ' + ${dFullName}"></h3>
 
     <div class="calendar mt-5">
         <div th:each="entry : ${scheduleByDay}">

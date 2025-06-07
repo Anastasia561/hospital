@@ -11,13 +11,13 @@
 
 <div layout:fragment="content">
     <div class="container mt-5">
-        <h2 class="mb-4">Book Appointment with <span th:text="${doctor.fullName}"></span></h2>
+        <h2 class="mb-4" th:text="#{pl.edu.hospital.patient.bookApp}+' '+${doctor.fullName}"></h2>
 
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <p><strong>Email:</strong> <span th:text="${doctor.email}"></span></p>
-                <p><strong>Specialization:</strong> <span th:text="${doctor.specialization}"></span></p>
-                <p><strong>Date:</strong> <span th:text="${date}"></span></p>
+                <p><strong th:text="#{pl.edu.hospital.profile.email}">Email:</strong> <span th:text="${doctor.email}"></span></p>
+                <p><strong th:text="#{pl.edu.hospital.profile.special}">Specialization:</strong> <span th:text="${doctor.specialization}"></span></p>
+                <p><strong th:text="#{pl.edu.hospital.patient.date}">Date:</strong> <span th:text="${date}"></span></p>
             </div>
         </div>
 
@@ -26,17 +26,17 @@
             <input type="hidden" name="date" th:value="${date}"/>
 
             <div class="mb-3">
-                <label for="time" class="form-label">Available Time Slots</label>
+                <label for="time" class="form-label" th:text="#{pl.edu.hospital.patient.avalTime}">Available Time Slots</label>
                 <select class="form-select" id="time" name="time" required>
-                    <option value="" disabled selected>Select a time</option>
+                    <option value="" disabled selected th:text="#{pl.edu.hospital.patient.selectTime}">Select a time</option>
                     <option th:each="slot : ${availableSlots}"
                             th:value="${slot}"
                             th:text="${slot}"></option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Confirm Appointment</button>
-            <a th:href="@{/patient/doctors}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.confirm}">Confirm</button>
+            <a th:href="@{/patient/doctors}" class="btn btn-secondary" th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
         </form>
     </div>
 </div>

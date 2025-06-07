@@ -10,39 +10,39 @@
      th:replace="~{fragments/nav :: nav-patient}"></div>
 
 <div layout:fragment="content" class="container mt-5">
-    <h3 class="mb-4">Medical Record Details</h3>
+    <h3 class="mb-4" th:text="#{pl.edu.hospital.record.details}">Medical Record Details</h3>
 
     <div class="card shadow p-4" th:if="${record!=null}">
-        <h5 class="mb-3">Doctor Info</h5>
-        <p><strong>Name:</strong> <span th:text="${record.doctorFullName}"></span></p>
-        <p><strong>Specialization:</strong> <span th:text="${record.specialization}"></span></p>
+        <h5 class="mb-3" th:text="#{pl.edu.hospital.record.doctorInfo}">Doctor Info</h5>
+        <p><strong th:text="#{pl.edu.hospital.profile.name}">Name:</strong> <span th:text="${record.doctorFullName}"></span></p>
+        <p><strong th:text="#{pl.edu.hospital.profile.special}">Specialization:</strong> <span th:text="${record.specialization}"></span></p>
 
         <hr>
 
-        <h5 class="mb-3">Appointment Info</h5>
-        <p><strong>Date:</strong> <span th:text="${' ' +record.appointmentDate}"></span></p>
+        <h5 class="mb-3" th:text="#{pl.edu.hospital.record.appInfo}">Appointment Info</h5>
+        <p><strong th:text="#{pl.edu.hospital.record.date}">Date:</strong> <span th:text="${' ' +record.appointmentDate}"></span></p>
 
         <hr>
 
-        <h5 class="mb-3">Medical Notes</h5>
-        <p><strong>Diagnosis:</strong></p>
+        <h5 class="mb-3" th:text="#{pl.edu.hospital.record.medNotes}">Medical Notes</h5>
+        <p><strong th:text="#{pl.edu.hospital.record.diagnosis}">Diagnosis:</strong></p>
         <p th:text="${record.diagnosis}" class="ms-3"></p>
 
-        <p><strong>Summary:</strong></p>
+        <p><strong th:text="#{pl.edu.hospital.record.summary}">Summary:</strong></p>
         <p th:text="${record.summary}" class="ms-3"></p>
 
         <hr>
 
-        <h5 class="mb-3">Prescriptions</h5>
+        <h5 class="mb-3" th:text="#{pl.edu.hospital.record.prescriptions}">Prescriptions</h5>
 
         <div th:if="${record.prescriptions != null and !#lists.isEmpty(record.prescriptions)}">
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
                 <tr>
-                    <th>Medicine Name</th>
-                    <th>Dosage</th>
-                    <th>Frequency</th>
-                    <th>Start Date - End Date</th>
+                    <th th:text="#{pl.edu.hospital.record.medicine}">Medicine Name</th>
+                    <th th:text="#{pl.edu.hospital.record.dosage}">Dosage</th>
+                    <th th:text="#{pl.edu.hospital.record.freq}">Frequency</th>
+                    <th th:text="#{pl.edu.hospital.record.startEnd}">Start Date - End Date</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,7 +58,7 @@
             </table>
         </div>
         <div th:if="${#lists.isEmpty(record.prescriptions)}">
-            <p class="text-muted">No prescriptions recorded</p>
+            <p class="text-muted" th:text="#{pl.edu.hospital.record.noPrescriptions}">No prescriptions recorded</p>
         </div>
     </div>
 

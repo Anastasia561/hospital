@@ -65,6 +65,7 @@ footer {
 .nav-link {
     font-size: 1.25rem;
     font-weight: 600;
+    white-space: nowrap;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;

@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,8 @@ import pl.edu.hospital.service.AppointmentService;
 import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
 import pl.edu.hospital.service.PatientService;
+import pl.edu.hospital.validation.OnCreate;
+import pl.edu.hospital.validation.OnUpdate;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -260,7 +263,7 @@ public class AdminController {
     }
 
     @PostMapping("/doctors/form")
-    public Object registerDoctor(@Valid @ModelAttribute("doctorDto") DoctorRegistrationDto dto,
+    public Object registerDoctor(@Validated(OnCreate.class) @ModelAttribute("doctorDto") DoctorRegistrationDto dto,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
@@ -319,9 +322,10 @@ public class AdminController {
     }
 
     @PostMapping("/profile/update")
-    public Object updateProfile(@Valid @ModelAttribute("admin") AdminForProfileDto dto,
+    public Object updateProfile(@Validated(OnUpdate.class) @ModelAttribute("admin") AdminForProfileDto dto,
                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getModel().values());
             model.addAttribute("editMode", true);
             model.addAttribute("languages", Language.values());
             return "admin_pages/admin_profile";

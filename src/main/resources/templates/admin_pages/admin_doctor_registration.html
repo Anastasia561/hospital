@@ -11,67 +11,67 @@
 
 <div layout:fragment="content">
     <div class="container mt-5">
-        <h2 class="mb-4 text-center">Register New Doctor</h2>
+        <h2 class="mb-4 text-center" th:text="#{pl.edu.hospital.admin.registerDoc}">Register New Doctor</h2>
 
         <form th:action="@{/admin/doctors/form}" th:object="${doctorDto}" method="post" class="card shadow p-4"
               novalidate>
             <div class="mb-3">
-                <label for="username" class="form-label">Username:</label>
+                <label for="username" class="form-label" th:text="#{pl.edu.hospital.profile.username}">Username:</label>
                 <input type="text" th:field="*{username}" class="form-control" id="username" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">Password:</label>
+                <label for="password" class="form-label"  th:text="#{pl.edu.hospital.profile.password}">Password:</label>
                 <input type="password" th:field="*{password}" id="password" class="form-control" required/>
                 <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="firstName" class="form-label">First Name:</label>
+                <label for="firstName" class="form-label"  th:text="#{pl.edu.hospital.profile.firstName}">First Name:</label>
                 <input type="text" th:field="*{firstName}" class="form-control" id="firstName" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name:</label>
+                <label for="lastName" class="form-label"  th:text="#{pl.edu.hospital.profile.lastName}">Last Name:</label>
                 <input type="text" th:field="*{lastName}" class="form-control" id="lastName" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
+                <label for="email" class="form-label"  th:text="#{pl.edu.hospital.profile.email}">Email:</label>
                 <input type="email" th:field="*{email}" class="form-control" id="email" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="mb-3">
-                <label for="language" class="form-label">Profile language:</label>
+                <label for="language" class="form-label"  th:text="#{pl.edu.hospital.profile.lang}">Profile language:</label>
                 <select id="language" name="language" class="form-control" required>
-                    <option value="" disabled selected>Select</option>
+                    <option value="" disabled selected  th:text="#{pl.edu.hospital.filter.select}">Select</option>
                     <option th:each="l : ${languages}" th:value="${l}" th:text="${l}"
                             th:selected="${selectedLanguage}"></option>
                 </select>
             </div>
 
             <div class="mb-3">
-                <label for="specialization" class="form-label">Specialization:</label>
+                <label for="specialization" class="form-label"  th:text="#{pl.edu.hospital.profile.special}">Specialization:</label>
                 <select id="specialization" name="specialization" class="form-control" required>
-                    <option value="" disabled selected>Select</option>
+                    <option value="" disabled selected  th:text="#{pl.edu.hospital.filter.select}">Select</option>
                     <option th:each="s : ${specializations}" th:value="${s}" th:text="${s}"
                             th:selected="${selectedSpecialization}"></option>
                 </select>
             </div>
 
             <div class="mb-3">
-                <label for="experience" class="form-label">Years of experience:</label>
+                <label for="experience" class="form-label"  th:text="#{pl.edu.hospital.profile.experience}">Years of experience:</label>
                 <input type="number" min="1" step="1" placeholder="1" th:field="*{experience}" class="form-control"
                        id="experience" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}"></div>
             </div>
 
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary px-4">Register</button>
+                <button type="submit" class="btn btn-primary px-4"  th:text="#{pl.edu.hospital.button.register}">Register</button>
             </div>
         </form>
     </div>

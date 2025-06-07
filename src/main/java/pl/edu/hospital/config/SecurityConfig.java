@@ -1,9 +1,14 @@
 package pl.edu.hospital.config;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -42,8 +47,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/images/**",
                                 "/styles.css",
-                                "login",
-                                "/register"
+                                "/login",
+                                "/register",
+                                "/webjars/**"
                         ).permitAll()
                         .requestMatchers("/patient/**").hasAnyRole("PATIENT")
                         .requestMatchers("/doctor/**").hasAnyRole("DOCTOR")
@@ -70,6 +76,14 @@ public class SecurityConfig {
         SessionLocaleResolver slr = new SessionLocaleResolver();
         slr.setDefaultLocale(Locale.ENGLISH);
         return slr;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("ValidationMessages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 
     @Bean

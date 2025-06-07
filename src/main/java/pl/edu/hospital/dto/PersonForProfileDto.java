@@ -4,14 +4,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import pl.edu.hospital.entity.enums.Language;
+import pl.edu.hospital.validation.OnCreate;
 import pl.edu.hospital.validation.annotation.UniqueUsername;
 import pl.edu.hospital.validation.annotation.ValidPassword;
 
 public abstract class PersonForProfileDto {
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    @UniqueUsername
-    protected String username;
+    @NotEmpty(groups = OnCreate.class)
+    @Size(min = 2, max = 50, groups = OnCreate.class)
+    @UniqueUsername(groups = OnCreate.class)
+    private String username;
     @ValidPassword
     protected String password;
     @NotEmpty

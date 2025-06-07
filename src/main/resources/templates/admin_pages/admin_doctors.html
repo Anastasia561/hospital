@@ -10,23 +10,27 @@
      th:replace="~{fragments/nav :: nav-admin}"></div>
 
 <div layout:fragment="content">
-    <h1>Doctors</h1>
+    <h1 th:text="#{pl.edu.hospital.nav.doctors}">Doctors</h1>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <form th:action="@{/admin/doctors}" method="get" class="d-flex align-items-center gap-2">
-            <label for="specialization" class="mb-0">Filter by Specialization:</label>
+            <label for="specialization" class="mb-0" th:text="#{pl.edu.hospital.filter.special}">Filter by
+                Specialization:</label>
             <select name="specialization" id="specialization" class="form-select w-auto">
-                <option value="" th:selected="${selectedSpecialization == null}">All</option>
+                <option value="" th:selected="${selectedSpecialization == null}"
+                        th:text="#{pl.edu.hospital.filter.all}">All
+                </option>
                 <option th:each="s : ${specializations}"
                         th:value="${s}"
                         th:text="${s}"
                         th:selected="${s.name() == selectedSpecialization}">
                 </option>
             </select>
-            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+            <button type="submit" class="btn btn-primary btn-sm" th:text="#{pl.edu.hospital.button.filter}">Filter
+            </button>
         </form>
 
-        <a th:href="@{/admin/doctors/register}" class="btn btn-primary">
+        <a th:href="@{/admin/doctors/register}" class="btn btn-primary" th:text="#{pl.edu.hospital.admin.addDoctor}">
             <i class="bi bi-person-plus-fill me-1"></i> Add Doctor
         </a>
     </div>
@@ -39,20 +43,26 @@
 
                         <div class="col-md-8">
                             <h3 class="card-title" th:text="${d.fullName}"></h3>
-                            <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${d.email}"></span></p>
-                            <p class="card-text mb-1"><strong>Years of experience:</strong> <span
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.email}">Email:</strong>
+                                <span th:text="${d.email}"></span></p>
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.experience}">Years of
+                                experience:</strong> <span
                                     th:text="${d.experience}"></span></p>
-                            <p class="card-text mb-1"><strong>Specialization:</strong> <span
-                                    th:text="${d.specialization}"></span></p>
-                            <p class="card-text mb-0"><strong>Employment date:</strong><span
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.special}">Specialization:</strong>
+                                <span
+                                        th:text="${d.specialization}"></span></p>
+                            <p class="card-text mb-0"><strong th:text="#{pl.edu.hospital.profile.empDate}">Employment
+                                date:</strong><span
                                     th:text="${' ' + d.employmentDate}"></span></p>
                         </div>
 
                         <div class="col-md-4 d-flex flex-column align-items-end justify-content-center gap-2">
                             <a th:href="@{/admin/doctors/{username}/schedule(username=${d.username})}"
-                               class="btn btn-outline-primary btn-sm text-center">Schedule</a>
+                               class="btn btn-outline-primary btn-sm text-center"
+                               th:text="#{pl.edu.hospital.button.schedule}">Schedule</a>
                             <a th:href="@{/admin/doctors/{username}/appointments(username=${d.username})}"
-                               class="btn btn-outline-success btn-sm text-center">Appointments</a>
+                               class="btn btn-outline-success btn-sm text-center"
+                               th:text="#{pl.edu.hospital.button.apps}">Appointments</a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +70,6 @@
         </div>
     </div>
 
-</div>
 </div>
 </body>
 </html>

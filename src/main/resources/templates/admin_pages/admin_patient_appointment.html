@@ -10,37 +10,37 @@
      th:replace="~{fragments/nav :: nav-admin}"></div>
 
 <div layout:fragment="content">
-    <h3 th:text="'Appointments for Patient ' + ${pFullName}"></h3>
+    <h3 th:text="#{pl.edu.hospital.admin.patientApps} +' '+ ${pFullName}"></h3>
     <form th:action="@{/admin/patients/{username}/apps(username=${username})}" method="post" class="row g-3 mb-4 mt-3">
         <div class="col-md-3">
-            <label for="startDate" class="form-label">Start Date</label>
+            <label for="startDate" class="form-label" th:text="#{pl.edu.hospital.filter.startDate}">Start Date</label>
             <input type="date" id="startDate" name="startDate" class="form-control" required>
         </div>
         <div class="col-md-3">
-            <label for="endDate" class="form-label">End Date</label>
+            <label for="endDate" class="form-label" th:text="#{pl.edu.hospital.filter.endDate}">End Date</label>
             <input type="date" id="endDate" name="endDate" class="form-control" required>
         </div>
 
         <div class="w-100"></div>
 
         <div class="col-md-3">
-            <label for="status" class="form-label">Filter By Status:</label>
+            <label for="status" class="form-label" th:text="#{pl.edu.hospital.filter.status}">Filter By Status:</label>
             <select id="status" name="status" class="form-control">
-                <option value="">All</option>
+                <option value="" th:text="#{pl.edu.hospital.filter.all}">All</option>
                 <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
             </select>
         </div>
 
         <div class="col-md-3">
-            <label for="specialization" class="form-label">Filter By Specialization:</label>
+            <label for="specialization" class="form-label" th:text="#{pl.edu.hospital.filter.special}">Filter By Specialization:</label>
             <select id="specialization" name="specialization" class="form-control">
-                <option value="">All</option>
+                <option value="" th:text="#{pl.edu.hospital.filter.all}">All</option>
                 <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"></option>
             </select>
         </div>
 
         <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">View</button>
+            <button type="submit" class="btn btn-primary w-100" th:text="#{pl.edu.hospital.button.view}">View</button>
         </div>
     </form>
 

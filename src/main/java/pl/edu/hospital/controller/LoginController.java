@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.hospital.dto.patient.PatientForProfileDto;
 import pl.edu.hospital.entity.enums.Language;
 import pl.edu.hospital.service.PatientService;
+import pl.edu.hospital.validation.OnCreate;
+
 
 @Controller
 public class LoginController {
@@ -40,8 +43,8 @@ public class LoginController {
 
     @PostMapping("/register")
     public Object processCreateForm(
-            @Valid @ModelAttribute("patient") PatientForProfileDto dto, BindingResult bindingResult,
-            RedirectAttributes redirectAttributes, Model model) {
+            @Validated(OnCreate.class) @ModelAttribute("patient") PatientForProfileDto dto,
+            BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("languages", Language.values());

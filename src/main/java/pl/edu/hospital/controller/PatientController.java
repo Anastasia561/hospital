@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ import pl.edu.hospital.service.ConsultationService;
 import pl.edu.hospital.service.DoctorService;
 import pl.edu.hospital.service.PatientService;
 import pl.edu.hospital.service.RecordService;
+import pl.edu.hospital.validation.OnUpdate;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -242,7 +244,7 @@ public class PatientController {
     }
 
     @PostMapping("/profile/update")
-    public Object updateProfile(@Valid @ModelAttribute("patient") PatientForProfileDto patient,
+    public Object updateProfile(@Validated(OnUpdate.class) @ModelAttribute("patient") PatientForProfileDto patient,
                                 BindingResult bindingResult,
                                 Model model) {
         if (bindingResult.hasErrors()) {

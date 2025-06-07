@@ -76,22 +76,4 @@ public class PatientForProfileDto extends PersonForProfileDto {
     public void setNumber(int number) {
         this.number = number;
     }
-
-    @Override
-    public String toString() {
-        return "PatientForProfileDto{" +
-                "birthDate=" + birthDate +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", number=" + number +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", language=" + language +
-                '}';
-    }
 }

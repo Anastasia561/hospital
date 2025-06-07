@@ -12,14 +12,16 @@
 <div layout:fragment="content">
     <form class="row g-3 mb-4 mt-2" method="get" th:action="@{/admin/patients}">
         <div class="col-md-4">
-            <input type="text" id="email" name="email" class="form-control" placeholder="Enter email"
+            <input type="text" id="email" name="email" class="form-control"
+                   th:placeholder="#{pl.edu.hospital.filter.emailPrompt}"
                    th:value="${param.email}">
         </div>
         <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Search</button>
+            <button type="submit" class="btn btn-primary w-100" th:text="#{pl.edu.hospital.button.search}">Search
+            </button>
         </div>
     </form>
-    <h1>Patients</h1>
+    <h1 th:text="#{pl.edu.hospital.nav.patients}">Patients</h1>
     <div class="row row-cols-1 g-4 mt-4" th:each="p : ${patients}">
         <div class="col">
             <div class="card shadow-sm">
@@ -28,19 +30,23 @@
 
                         <div class="col-md-8">
                             <h3 class="card-title" th:text="${p.fullName}"></h3>
-                            <p class="card-text mb-1"><strong>Email:</strong> <span th:text="${p.email}"></span></p>
-                            <p class="card-text mb-1"><strong>Phone:</strong> <span th:text="${p.phone}"></span></p>
-                            <p class="card-text mb-1"><strong>Birth Date:</strong> <span
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.email}">Email:</strong>
+                                <span th:text="${p.email}"></span></p>
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.phone}">Phone:</strong>
+                                <span th:text="${p.phone}"></span></p>
+                            <p class="card-text mb-1"><strong th:text="#{pl.edu.hospital.profile.birthDate}">Birth
+                                Date:</strong> <span
                                     th:text="${''+p.birthDate}"></span></p>
                             <p class="card-text mb-0">
-                                <strong>Address:</strong>
+                                <strong th:text="#{pl.edu.hospital.profile.address}">Address:</strong>
                                 <span th:text="${p.address.street + ' ' + p.address.number + ', ' + p.address.city.name + ', ' + p.address.city.country.name}"></span>
                             </p>
                         </div>
 
                         <div class="col-md-4 d-flex flex-column align-items-end justify-content-center gap-2">
                             <a th:href="@{/admin/patients/{username}/appointments(username=${p.username})}"
-                               class="btn btn-outline-primary btn-sm text-center">Appointments</a>
+                               class="btn btn-outline-primary btn-sm text-center"
+                               th:text="#{pl.edu.hospital.button.apps}">Appointments</a>
                         </div>
                     </div>
                 </div>

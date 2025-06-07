@@ -15,7 +15,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.personService = personService;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return personService.findByUsername(username)
@@ -23,6 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .username(u.getUsername())
                         .password(u.getPassword())
                         .roles(u.getRole().name())
-                        .build()).orElseThrow(() -> new UsernameNotFoundException(username));
+                        .build()
+                ).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

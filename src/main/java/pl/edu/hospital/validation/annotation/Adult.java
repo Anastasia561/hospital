@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AdultValidator.class)
 public @interface Adult {
-    String message() default "Patient must be at least 18 years old";
+    String message() default "{pl.edu.hospital.failure.adult}";
 
     Class<?>[] groups() default {};
 

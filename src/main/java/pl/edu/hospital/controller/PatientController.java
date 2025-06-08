@@ -1,6 +1,6 @@
 package pl.edu.hospital.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -105,9 +105,9 @@ public class PatientController {
         redirectAttributes.addFlashAttribute("selectedStatus", status);
         redirectAttributes.addFlashAttribute("selectedSpecialization", specialization);
         if (startDate.isAfter(endDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.date");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "No data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
@@ -119,7 +119,7 @@ public class PatientController {
                                           RedirectAttributes redirectAttributes) {
         try {
             appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId, false);
-            redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.appCancel");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -144,8 +144,7 @@ public class PatientController {
 
         redirectAttributes.addFlashAttribute("selectedDate", date);
         if (date.isBefore(LocalDate.now())) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Can not schedule appointment for past dates");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.appPast");
             return new RedirectView("/patient/doctors", true, false);
         } else {
             DoctorForAdminDto dto = doctorService.findByUsernameForAdminDto(username);
@@ -153,8 +152,7 @@ public class PatientController {
             try {
                 timeSlots = appointmentService.getAvailableTimeSlotsForDoctorByUsername(username, date);
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage",
-                        "Doctor " + dto.getFullName() + " is not available at selected date");
+                redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.docAval");
                 return new RedirectView("/patient/doctors", true, false);
             }
             model.addAttribute("doctor", dto);
@@ -175,7 +173,7 @@ public class PatientController {
 
         try {
             appointmentService.createAppointment(patientUsername, doctorUsername, date, time);
-            redirectAttributes.addFlashAttribute("successMessage", "Appointment booked successfully.");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.appBook");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -189,7 +187,7 @@ public class PatientController {
                 : doctorService.getAllBySpecialization(Specialization.valueOf(specialization));
 
         if (doctors.isEmpty()) {
-            model.addAttribute("errorMessage", "No data found");
+            model.addAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         }
 
         model.addAttribute("specializations", Specialization.values());
@@ -244,10 +242,11 @@ public class PatientController {
     }
 
     @PostMapping("/profile/update")
-    public Object updateProfile(@Validated(OnUpdate.class) @ModelAttribute("patient") PatientForProfileDto patient,
+    public Object updateProfile(@Validated({Default.class, OnUpdate.class}) @ModelAttribute("patient") PatientForProfileDto patient,
                                 BindingResult bindingResult,
                                 Model model) {
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getModel().values());
             model.addAttribute("languages", Language.values());
             model.addAttribute("editMode", true);
             return "patient_pages/patient_profile";

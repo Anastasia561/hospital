@@ -1,6 +1,6 @@
 package pl.edu.hospital.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -112,9 +112,9 @@ public class DoctorController {
         redirectAttributes.addFlashAttribute("endDate", endDate);
         redirectAttributes.addFlashAttribute("selectedStatus", status);
         if (startDate.isAfter(endDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.date");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "No data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
@@ -142,7 +142,7 @@ public class DoctorController {
                                           RedirectAttributes redirectAttributes) {
         try {
             appointmentService.updateAppointmentStatus(Status.CANCELLED, appointmentId, true);
-            redirectAttributes.addFlashAttribute("successMessage", "Appointment cancelled successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.appCancel");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -182,7 +182,7 @@ public class DoctorController {
         try {
             recordService.saveRecord(dto);
             appointmentService.updateAppointmentStatus(Status.COMPLETED, appId, true);
-            redirectAttributes.addFlashAttribute("successMessage", "Medical record created successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.record");
         } catch (AppointmentNotFoundException e) {
             redirectAttributes.addAttribute("errorMessage", e.getMessage());
         }
@@ -214,7 +214,7 @@ public class DoctorController {
     }
 
     @PostMapping("/profile/update")
-    public Object updateProfile(@Validated(OnUpdate.class) @ModelAttribute("doctor") DoctorForProfileDto dto,
+    public Object updateProfile(@Validated({Default.class, OnUpdate.class}) @ModelAttribute("doctor") DoctorForProfileDto dto,
                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("languages", Language.values());

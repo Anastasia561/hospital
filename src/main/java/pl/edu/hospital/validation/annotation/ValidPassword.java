@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPassword {
-    String message() default "Invalid password (must contain at least 1 uppercase, 1 lowercase, 3 digits)";
+    String message() default "{pl.edu.hospital.failure.passValidation}";
 
     Class<?>[] groups() default {};
 

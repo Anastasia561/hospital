@@ -81,7 +81,8 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.birthDate}">Birth Date</label>
+                                    <label class="form-label fw-semibold"
+                                           th:text="#{pl.edu.hospital.profile.birthDate}">Birth Date</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-calendar-alt text-primary"></i>
@@ -163,7 +164,8 @@
                                         <div class="col-md-2">
                                             <label for="number" class="form-label fw-semibold"
                                                    th:text="#{pl.edu.hospital.profile.number}">Number</label>
-                                            <input id="number" type="text" class="form-control" name="number"
+                                            <input id="number" type="number" step="1" min="0" class="form-control"
+                                                   name="number"
                                                    placeholder="Number"
                                                    th:value="*{number}" required>
                                             <div class="text-danger" th:if="${#fields.hasErrors('number')}"
@@ -174,13 +176,17 @@
                             </div>
 
                             <div th:if="${editMode}" class="d-flex justify-content-between mt-5">
-                                <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.save}">Save</button>
-                                <a th:href="@{/patient/profile}" class="btn btn-secondary" th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
+                                <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.save}">
+                                    Save
+                                </button>
+                                <a th:href="@{/patient/profile}" class="btn btn-secondary"
+                                   th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
                             </div>
                         </form>
 
                         <div th:if="${!editMode}" class="d-flex justify-content-center mt-5">
-                            <a th:href="@{/patient/profile/edit}" class="btn btn-outline-primary" th:text="#{pl.edu.hospital.button.edit}">Edit</a>
+                            <a th:href="@{/patient/profile/edit}" class="btn btn-outline-primary"
+                               th:text="#{pl.edu.hospital.button.edit}">Edit</a>
                         </div>
 
                     </div>

@@ -1,6 +1,6 @@
 package pl.edu.hospital.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -72,7 +72,7 @@ public class AdminController {
     @GetMapping("/info")
     public String getStatistics(Model model) {
         if (doctorService.getAllForAdmin().isEmpty()) {
-            model.addAttribute("errorMessage", "No data found");
+            model.addAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         }
         model.addAttribute("doctors", doctorService.getAllForAdmin());
         return "admin_pages/admin_statistics";
@@ -91,7 +91,7 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("endDate", endDate);
 
         if (startDate.isAfter(endDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.date");
         } else {
             String dUsername = data.split(" ")[0];
             String dFullName = data.split(" ", 2)[1];
@@ -109,7 +109,7 @@ public class AdminController {
                 ? patientService.getAllForAdmin()
                 : patientService.getAllForAdminByEmail(email);
         if (patients.isEmpty()) {
-            model.addAttribute("errorMessage", "No data found");
+            model.addAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         }
         model.addAttribute("patients", patients);
         return "admin_pages/admin_patients";
@@ -122,7 +122,7 @@ public class AdminController {
                 : doctorService.getAllBySpecialization(Specialization.valueOf(specialization));
 
         if (doctors.isEmpty()) {
-            model.addAttribute("errorMessage", "No data found");
+            model.addAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         }
 
         model.addAttribute("specializations", Specialization.values());
@@ -136,12 +136,11 @@ public class AdminController {
                                                RedirectAttributes redirectAttributes) {
         if (consultation.getStartTime().isAfter(consultation.getEndTime()) ||
                 consultation.getStartTime().equals(consultation.getEndTime())) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Invalid time range for consultation hours");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.time");
         } else {
             consultationService.updateConsultation(consultation);
             appointmentService.cancelForUpdatedConsultation(consultation.getId());
-            redirectAttributes.addFlashAttribute("successMessage", "Consultation updated successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.consUpdate");
         }
         return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
                 true, false);
@@ -152,11 +151,10 @@ public class AdminController {
                                            RedirectAttributes redirectAttributes) {
         if (consultation.getStartTime().isAfter(consultation.getEndTime()) ||
                 consultation.getStartTime().equals(consultation.getEndTime())) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "Invalid time range for consultation hours");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.time");
         } else {
             consultationService.createConsultation(consultation);
-            redirectAttributes.addFlashAttribute("successMessage", "Consultation created successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.consCreate");
         }
         return new RedirectView("/admin/doctors/" + consultation.getDoctorUsername() + "/schedule",
                 true, false);
@@ -170,7 +168,7 @@ public class AdminController {
             consultationService.deleteConsultation(id);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            redirectAttributes.addFlashAttribute("successMessage", "Consultation deleted successfully");
+            redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.consDelete");
         }
 
         return new RedirectView("/admin/doctors/" + doctorUsername + "/schedule", true, false);
@@ -193,9 +191,9 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("selectedStatus", status);
 
         if (startDate.isAfter(endDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.date");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
@@ -231,9 +229,9 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("pFullName", patientService.getPatientFullNameByUsername(username));
         redirectAttributes.addFlashAttribute("username", username);
         if (startDate.isAfter(endDate)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid date range");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.date");
         } else if (appointments.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Not data found");
+            redirectAttributes.addFlashAttribute("errorMessage", "pl.edu.hospital.failure.noData");
         } else {
             redirectAttributes.addFlashAttribute("appointments", appointments);
         }
@@ -263,7 +261,7 @@ public class AdminController {
     }
 
     @PostMapping("/doctors/form")
-    public Object registerDoctor(@Validated(OnCreate.class) @ModelAttribute("doctorDto") DoctorRegistrationDto dto,
+    public Object registerDoctor(@Validated({Default.class, OnCreate.class}) @ModelAttribute("doctorDto") DoctorRegistrationDto dto,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
@@ -274,7 +272,7 @@ public class AdminController {
             return "admin_pages/admin_doctor_registration";
         }
         doctorService.createDoctor(dto);
-        redirectAttributes.addFlashAttribute("successMessage", "Doctor registered successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "pl.edu.hospital.success.docRegister");
         return new RedirectView("/admin/doctors", true, false);
     }
 
@@ -322,7 +320,7 @@ public class AdminController {
     }
 
     @PostMapping("/profile/update")
-    public Object updateProfile(@Validated(OnUpdate.class) @ModelAttribute("admin") AdminForProfileDto dto,
+    public Object updateProfile(@Validated({Default.class, OnUpdate.class}) @ModelAttribute("admin") AdminForProfileDto dto,
                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getModel().values());

@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPhone {
-    String message() default "Invalid phone number";
+    String message() default "{pl.edu.hospital.failure.phone}";
 
     Class<?>[] groups() default {};
 

@@ -12,8 +12,8 @@ public abstract class PersonForProfileDto {
     @NotEmpty(groups = OnCreate.class)
     @Size(min = 2, max = 50, groups = OnCreate.class)
     @UniqueUsername(groups = OnCreate.class)
-    private String username;
-    @ValidPassword
+    protected String username;
+    @ValidPassword(groups = OnCreate.class)
     protected String password;
     @NotEmpty
     @Size(min = 3, max = 50)
@@ -21,7 +21,8 @@ public abstract class PersonForProfileDto {
     @NotEmpty
     @Size(min = 3, max = 50)
     protected String lastName;
-    @Email(message = "Email must be a valid email address")
+    @NotEmpty
+    @Email(message = "{pl.edu.hospital.failure.invalidEmail}")
     protected String email;
     protected Language language;
 

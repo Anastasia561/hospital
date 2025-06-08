@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.webjars:font-awesome:6.4.0'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'junit:junit:4.13.1'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

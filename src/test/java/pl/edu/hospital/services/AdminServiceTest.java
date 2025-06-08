@@ -33,7 +33,7 @@ public class AdminServiceTest {
     private AdminService adminService;
 
     @Test
-    void shouldReturnAdminDtoWhenUsernameExists() {
+    void findByUsernameForProfileDtoTest_shouldReturnAdminDtoWhenUsernameExists() {
         String username = "adminUser";
         Admin admin = new Admin();
         admin.setUsername(username);
@@ -52,7 +52,7 @@ public class AdminServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUsernameNotFound() {
+    void findByUsernameForProfileDtoTest_shouldThrowExceptionWhenUsernameNotFound() {
         String username = "unknownUser";
         when(adminRepository.findByUsername(username)).thenReturn(Optional.empty());
 
@@ -63,7 +63,7 @@ public class AdminServiceTest {
     }
 
     @Test
-    void shouldUpdateAdminFields() {
+    void updateAdminTest_shouldUpdateAdminFields() {
         String username = "adminUser";
         Admin admin = new Admin();
         admin.setUsername(username);
@@ -89,7 +89,7 @@ public class AdminServiceTest {
     }
 
     @Test
-    void shouldThrowWhenUpdatingNonExistingAdmin() {
+    void updateAdmin_shouldThrowWhenUpdatingNonExistingAdmin() {
         AdminForProfileDto dto = new AdminForProfileDto();
         dto.setUsername("nonexistent");
 

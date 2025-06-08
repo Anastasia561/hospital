@@ -32,7 +32,8 @@
         </div>
 
         <div class="col-md-3">
-            <label for="specialization" class="form-label" th:text="#{pl.edu.hospital.filter.special}">Filter By Specialization:</label>
+            <label for="specialization" class="form-label" th:text="#{pl.edu.hospital.filter.special}">Filter By
+                Specialization:</label>
             <select id="specialization" name="specialization" class="form-control">
                 <option value="" th:text="#{pl.edu.hospital.filter.all}">All</option>
                 <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"></option>

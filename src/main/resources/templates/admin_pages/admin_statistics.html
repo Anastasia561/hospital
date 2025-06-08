@@ -39,12 +39,6 @@
         </div>
     </form>
 
-    <div class="py-5 align-items-center">
-        <div th:if="${errorMessage}" class="alert alert-danger text-center">
-            <p th:text="${errorMessage}"></p>
-        </div>
-    </div>
-
     <div th:if="${statistics != null}">
         <h2 th:text="#{pl.edu.hospital.admin.stat}+' '+${doctorFullName}"></h2>
         <p th:text="#{pl.edu.hospital.admin.from} +' '+ ${startDate} + ' '+ #{pl.edu.hospital.admin.to} + ' '+${endDate}"></p>

@@ -60,4 +60,3 @@ public class PatientForAdminDto {
         this.address = address;
     }
 }
-

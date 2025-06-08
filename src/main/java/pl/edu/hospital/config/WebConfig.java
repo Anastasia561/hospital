@@ -5,7 +5,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pl.edu.hospital.utils.LocaleInterceptor;
 
-
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 

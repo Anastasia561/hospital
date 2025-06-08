@@ -46,14 +46,4 @@ public class Patient extends Person {
     public void setAddress(Address address) {
         this.address = address;
     }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "birthDate=" + birthDate +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address=" + address +
-                ", appointments=" + appointments +
-                '}';
-    }
 }

@@ -43,7 +43,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" th:field="*{password}" id="password" class="form-control" required/>
+                                <input type="password" th:field="*{password}" id="password" class="form-control"
+                                       required/>
                                 <div class="text-danger" th:if="${#fields.hasErrors('password')}"
                                      th:errors="*{password}"></div>
                             </div>
@@ -59,7 +60,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="birthDate" class="form-label">Birth Date</label>
-                                <input type="date" th:field="*{birthDate}" id="birthDate" class="form-control" required/>
+                                <input type="date" th:field="*{birthDate}" id="birthDate" class="form-control"
+                                       required/>
                                 <div class="text-danger" th:if="${#fields.hasErrors('birthDate')}"
                                      th:errors="*{birthDate}"></div>
                             </div>

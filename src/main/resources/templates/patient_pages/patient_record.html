@@ -14,13 +14,16 @@
 
     <div class="card shadow p-4" th:if="${record!=null}">
         <h5 class="mb-3" th:text="#{pl.edu.hospital.record.doctorInfo}">Doctor Info</h5>
-        <p><strong th:text="#{pl.edu.hospital.profile.name}">Name:</strong> <span th:text="${record.doctorFullName}"></span></p>
-        <p><strong th:text="#{pl.edu.hospital.profile.special}">Specialization:</strong> <span th:text="${record.specialization}"></span></p>
+        <p><strong th:text="#{pl.edu.hospital.profile.name}">Name:</strong> <span
+                th:text="${record.doctorFullName}"></span></p>
+        <p><strong th:text="#{pl.edu.hospital.profile.special}">Specialization:</strong> <span
+                th:text="${record.specialization}"></span></p>
 
         <hr>
 
         <h5 class="mb-3" th:text="#{pl.edu.hospital.record.appInfo}">Appointment Info</h5>
-        <p><strong th:text="#{pl.edu.hospital.record.date}">Date:</strong> <span th:text="${' ' +record.appointmentDate}"></span></p>
+        <p><strong th:text="#{pl.edu.hospital.record.date}">Date:</strong> <span
+                th:text="${' ' +record.appointmentDate}"></span></p>
 
         <hr>
 

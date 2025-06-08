@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.hospital.dto.ConsultationDto;
 import pl.edu.hospital.entity.Consultation;
-import pl.edu.hospital.exception.DoctorNotFoundException;
 import pl.edu.hospital.mapper.ConsultationMapper;
 import pl.edu.hospital.repository.ConsultationRepository;
-import pl.edu.hospital.repository.DoctorRepository;
 
 import java.util.List;
 import java.util.Optional;

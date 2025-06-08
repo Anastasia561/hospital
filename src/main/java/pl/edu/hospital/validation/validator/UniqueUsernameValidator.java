@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import pl.edu.hospital.repository.PersonRepository;
 import pl.edu.hospital.validation.annotation.UniqueUsername;
 
-
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
     private final PersonRepository personRepository;
 

@@ -24,7 +24,8 @@
                         <form th:action="@{/admin/profile/update}" th:object="${admin}" method="post" novalidate>
                             <div class="row mb-4">
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.firstName}">First Name</label>
+                                    <label class="form-label fw-semibold"
+                                           th:text="#{pl.edu.hospital.profile.firstName}">First Name</label>
                                     <input type="text" name="firstName" class="form-control"
                                            th:value="*{firstName}"
                                            th:readonly="${!editMode}">
@@ -32,7 +33,8 @@
                                          th:errors="*{firstName}"></div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.lastName}">Last Name</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.lastName}">Last
+                                        Name</label>
                                     <input type="text" name="lastName" class="form-control"
                                            th:value="*{lastName}"
                                            th:readonly="${!editMode}">
@@ -88,7 +90,8 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.empDate}">Employment Date</label>
+                                    <label class="form-label fw-semibold" th:text="#{pl.edu.hospital.profile.empDate}">Employment
+                                        Date</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-white">
                                             <i class="fas fa-calendar-alt text-info"></i>
@@ -100,8 +103,11 @@
                             </div>
 
                             <div th:if="${editMode}" class="d-flex justify-content-between mt-5">
-                                <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.save}">Save</button>
-                                <a th:href="@{/admin/profile}" class="btn btn-secondary" th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
+                                <button type="submit" class="btn btn-primary" th:text="#{pl.edu.hospital.button.save}">
+                                    Save
+                                </button>
+                                <a th:href="@{/admin/profile}" class="btn btn-secondary"
+                                   th:text="#{pl.edu.hospital.button.cancel}">Cancel</a>
                             </div>
                         </form>
 

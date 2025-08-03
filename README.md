@@ -1,6 +1,6 @@
 # MediCore - Hospital Management System
 
-**MediCore** is a full-stack web application designed to streamline and modernize hospital and clinic operations. It helps patients, doctors, and administrators manage appointments, records, and communication efficiently through a secure and user-friendly interface.
+**MediCore** is a web application designed to streamline and modernize hospital and clinic operations. It helps patients, doctors, and administrators manage appointments, records, and communication efficiently through a secure and user-friendly interface.
 
 ---
 
